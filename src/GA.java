@@ -2,10 +2,11 @@ public class GA{
 
     public int ga(){
 
-        List<Piece> visited=new ArrayList<Piece>(); //visited pieces for puzzle 2 and puzzle 1?
 
-        boolean worthy=false; //for second puzzle
-        Piece
+        Population population = new Population();
+        Individual fittest;
+        Individual secondFittest;
+        int generationCount = 0;
 
     }
 
@@ -18,7 +19,6 @@ public class GA{
             case 2:
                 //score=GA.puzzle2()
                 //break;
-
         }
         return score;
     }
