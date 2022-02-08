@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -29,15 +30,17 @@ public class Main {
 			File file = new File("" + fileName);
 			Scanner scanner = new Scanner(file);
 			int i = 0;
-			float[] numbers = new float[40];
+			List<Float> numbers = new ArrayList<>();
+//			float[] numbers = new float[40];
 			while (scanner.hasNextLine()) {
 				float number = scanner.nextFloat();
-				numbers[i] = number;
+				numbers.add(number);
+//				numbers[i] = number;
 				i++;
 			}
-			Population population = new Population();
 			int size = 10;
-			population.initializePopulation(size, numbers);
+			Population population = new Population(size);
+			population.initializePopulation(numbers);
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found.");
 			e.printStackTrace();
