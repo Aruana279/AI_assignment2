@@ -1,12 +1,17 @@
-import java.util.List;
-
-
 public class Main {
+	Individual fittest;
+
 
 	public static void main(String[] args) {
+		int puzzlePassed = Integer.parseInt(args[0]);
 		String fileName=args[1];
-		int puzzlePassed =Integer.parseInt(args[0]);
-		GA ga= new GA();
+
+		GA geneticAlg= new GA();
+		//extract numbers from file
+		//int[] nmbs= fileName.extractNums;
+
+
+		//System.out.println(geneticAlg.ga(nmbs, puzzlePassed));
 	}
 
 }
