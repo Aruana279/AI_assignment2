@@ -44,8 +44,7 @@ public class Main {
 		}
 
 		GA geneticAlg= new GA();
-		//extract numbers from file
-		//int[] nmbs= fileName.extractNums;
+
 
 
 		//System.out.println(geneticAlg.ga(nmbs, puzzlePassed));
