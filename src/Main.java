@@ -27,7 +27,7 @@ public class Main {
 //		}
 
 		try {
-			File file = new File("" + fileName);
+			File file = new File("/Users/mollysunray/OneDrive - Worcester Polytechnic Institute (wpi.edu)/Courses/Junior/CS 4341/Assignments/Assignment2/src/" + fileName);
 			Scanner scanner = new Scanner(file);
 			int i = 0;
 			List<Float> numbers = new ArrayList<>();
@@ -38,9 +38,8 @@ public class Main {
 //				numbers[i] = number;
 				i++;
 			}
-			int size = 10;
-			Population population = new Population(size);
-			population.initializePopulation(numbers);
+			GA ga = new GA();
+			ga.ga(numbers, 1);
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found.");
 			e.printStackTrace();
