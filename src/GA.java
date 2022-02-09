@@ -49,4 +49,16 @@ public class GA{
             System.out.print(num + " ");
         }
     }
+    private void elitism(Population pop){
+        Population top=new Population(topSize, 0, listOfIndiv){
+            for (int i=0; i<topSize; i++){
+                float random=(float)(Math.random()*pop.individuals.size());
+                top.listOfIndiv
+            }
+
+        }
+
+    }
 }
+
+
