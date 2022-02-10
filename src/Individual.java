@@ -3,7 +3,6 @@ import java.util.List;
 
 public class Individual {
     float fitness = 0;
-    int indLength = 10;
     List<Float> bin1 = new ArrayList<>();
     List<Float> bin2 = new ArrayList<>();
     List<Float> bin3 = new ArrayList<>();
@@ -11,33 +10,6 @@ public class Individual {
 
     public Individual() {
     }
-
-//    public void calculateFitness() {
-//        int bin1Score = 1;
-//        for (int num : bin1) {
-//            bin1Score *= num;
-//        }
-//
-//        int bin2Score = 0;
-//        for (int num : bin2) {
-//            bin2Score += num;
-//        }
-//
-//        int max = -10;
-//        int min = 10;
-//        for (int num : bin3) {
-//            if (num > max) {
-//                max = num;
-//            }
-//            if (num < min) {
-//                min = num;
-//            }
-//        }
-//        int bin3Score = max - min;
-//
-//        fitness = bin1Score + bin2Score + bin3Score;
-//    }
-
 
     public float calculateFitness() {
         float bin1Score = 1;
@@ -64,5 +36,17 @@ public class Individual {
 
         fitness = bin1Score + bin2Score + bin3Score;
         return fitness;
+    }
+
+    public List<Float> getBin(int binNumber) {
+        if (binNumber == 1) {
+            return bin1;
+        } else if (binNumber == 2) {
+            return bin2;
+        } else if (binNumber == 3) {
+            return bin3;
+        } else {
+            return bin4;
+        }
     }
 }
