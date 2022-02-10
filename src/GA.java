@@ -1,3 +1,4 @@
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -84,6 +85,7 @@ public class GA {
     }
 
     public List<Individual> crossover(int size, List<Individual> individuals) {
+        DecimalFormat df = new DecimalFormat("#.#");
         ////        ThreadLocalRandom.current().nextInt(min, max + 1);
         List<Individual> result = new ArrayList<>();
         int numChildren = 0;
@@ -97,38 +99,145 @@ public class GA {
             Individual parent1 = individuals.get(parent1Index);
             Individual parent2 = individuals.get(parent2Index);
 
+            List<Integer> parent1Bins = new ArrayList<>();
+            List<Integer> parent2Bins = new ArrayList<>();
+
             int parent1RandomBin = random.nextInt(4) + 1;
-            int parent2RandomBin = random.nextInt(4) + 1;
-            System.out.println("Before crossover");
-            for (float num : parent1.getBin(parent1RandomBin)) {
-                System.out.print(num + " ");
+            parent1Bins.add(parent1RandomBin);
+            while (parent1Bins.size() < 4) {
+                while (parent1Bins.contains(parent1RandomBin)) {
+                    parent1RandomBin = random.nextInt(4) + 1;
+                }
+                parent1Bins.add(parent1RandomBin);
             }
-            System.out.println();
-            for (float num : parent2.getBin(parent2RandomBin)) {
-                System.out.print(num + " ");
+
+            System.out.println("PARENT 1 BIN NUMBERS");
+            for (int num : parent1Bins) {
+                System.out.println(num);
             }
             System.out.println();
 
-            int cutPoint = random.nextInt(8) + 1;
-            for (int j = 0; j < cutPoint; j++) {
-                float value1 = parent1.getBin(parent1RandomBin).get(j);
-                float value2 = parent2.getBin(parent2RandomBin).get(j);
-                parent1.getBin(parent1RandomBin).set(j, value2);
-                parent2.getBin(parent2RandomBin).set(j, value1);
+            int parent2RandomBin = random.nextInt(4) + 1;
+            parent2Bins.add(parent2RandomBin);
+            while (parent2Bins.size() < 4) {
+                while (parent2Bins.contains(parent2RandomBin)) {
+                    parent2RandomBin = random.nextInt(4) + 1;
+                }
+                parent2Bins.add(parent2RandomBin);
             }
+
+            System.out.println("PARENT 2 BIN NUMBERS");
+            for (int num : parent2Bins) {
+                System.out.println(num);
+            }
+            System.out.println();
+
+            System.out.println("Before crossover");
+            System.out.println("Parent 1");
+            System.out.print("Bin 1: ");
+            for (float num : parent1.getBin(1)) {
+                System.out.print(df.format(num) + " ");
+            }
+            System.out.println();
+            System.out.print("Bin 2: ");
+            for (float num : parent1.getBin(2)) {
+                System.out.print(df.format(num) + " ");
+            }
+            System.out.println();
+            System.out.print("Bin 3: ");
+            for (float num : parent1.getBin(3)) {
+                System.out.print(df.format(num) + " ");
+            }
+            System.out.println();
+            System.out.print("Bin 4: ");
+            for (float num : parent1.getBin(4)) {
+                System.out.print(df.format(num) + " ");
+            }
+            System.out.println();
+            System.out.println();
+            System.out.println("Parent 2");
+            System.out.print("Bin 1: ");
+            for (float num : parent2.getBin(1)) {
+                System.out.print(df.format(num) + " ");
+            }
+            System.out.println();
+            System.out.print("Bin 2: ");
+            for (float num : parent2.getBin(2)) {
+                System.out.print(df.format(num) + " ");
+            }
+            System.out.println();
+            System.out.print("Bin 3: ");
+            for (float num : parent2.getBin(3)) {
+                System.out.print(df.format(num) + " ");
+            }
+            System.out.println();
+            System.out.print("Bin 4: ");
+            for (float num : parent2.getBin(4)) {
+                System.out.print(df.format(num) + " ");
+            }
+            System.out.println();
+            System.out.println();
+
+            for (int i = 0; i < 4; i++) {
+                int cutPoint = random.nextInt(8) + 1;
+                System.out.println("cut point: " + cutPoint);
+                for (int j = 0; j < cutPoint; j++) {
+                    int parent1Bin = parent1Bins.get(i);
+                    int parent2Bin = parent2Bins.get(i);
+                    float value1 = parent1.getBin(parent1Bin).get(j);
+                    float value2 = parent2.getBin(parent2Bin).get(j);
+                    parent1.getBin(parent1Bin).set(j, value2);
+                    parent2.getBin(parent2Bin).set(j, value1);
+                }
+            }
+
             result.add(parent1);
             result.add(parent2);
             numChildren += 2;
 
             System.out.println("After crossover");
-            for (float num : parent1.getBin(parent1RandomBin)) {
-                System.out.print(num + " ");
+            System.out.println("Parent 1");
+            System.out.print("Bin 1: ");
+            for (float num : parent1.getBin(1)) {
+                System.out.print(df.format(num) + " ");
             }
             System.out.println();
-            for (float num : parent2.getBin(parent2RandomBin)) {
-                System.out.print(num + " ");
+            System.out.print("Bin 2: ");
+            for (float num : parent1.getBin(2)) {
+                System.out.print(df.format(num) + " ");
             }
             System.out.println();
+            System.out.print("Bin 3: ");
+            for (float num : parent1.getBin(3)) {
+                System.out.print(df.format(num) + " ");
+            }
+            System.out.println();
+            System.out.print("Bin 4: ");
+            for (float num : parent1.getBin(4)) {
+                System.out.print(df.format(num) + " ");
+            }
+            System.out.println();
+            System.out.println();
+            System.out.println("Parent 2");
+            System.out.print("Bin 1: ");
+            for (float num : parent2.getBin(1)) {
+                System.out.print(df.format(num) + " ");
+            }
+            System.out.println();
+            System.out.print("Bin 2: ");
+            for (float num : parent2.getBin(2)) {
+                System.out.print(df.format(num) + " ");
+            }
+            System.out.println();
+            System.out.print("Bin 3: ");
+            for (float num : parent2.getBin(3)) {
+                System.out.print(df.format(num) + " ");
+            }
+            System.out.println();
+            System.out.print("Bin 4: ");
+            for (float num : parent2.getBin(4)) {
+                System.out.print(df.format(num) + " ");
+            }
             System.out.println();
             System.out.println();
         }
