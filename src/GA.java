@@ -12,14 +12,14 @@ public class GA {
 
     public int ga(List<Float> numbers, int puzzle, int seconds) {
         long startTime = System.currentTimeMillis() / 1000;
-        int size = 10;
-        int NUMSAVED = 2;
-        int NUMREMOVED = 3;
+        int size = 100;
+        int NUMSAVED = (int) Math.floor(0.2 * (double) size);
+        int NUMREMOVED = (int) Math.floor(0.3 * (double) size);
         Population population = new Population(size);
         population.initializePopulation(numbers);
         int generationCount = 0;
         while (System.currentTimeMillis() / 1000 < startTime + seconds) {
-        //while (generationCount < 3) {
+        //while (generationCount < 10) {
             System.out.println("\nGENERATION " + generationCount);
             List<Individual> newIndividuals = new ArrayList<>();
             // Get fittest individuals from elitism and use those for the next generation
