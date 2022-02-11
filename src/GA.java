@@ -246,16 +246,39 @@ public class GA {
 //        }
         return result;
     }
-//    private void elitism(Population pop){
-//        Population top=new Population(topSize, 0, listOfIndiv){
-//            for (int i=0; i<topSize; i++){
-//                float random=(float)(Math.random()*pop.individuals.size());
-//                top.listOfIndiv
-//            }
-//
+private void elitism(Population population, int parentSize){
+//        Population topParents=new Population(2, );
+//        for (int i=0; i< parentSize; i++){
+//            int random=(int)(Math.random()*population.getIndividuals().size());
+//            topParents.getIndividuals().add(population.getASingleIndividual(random));
 //        }
-//
-//    }
+        List<Float> fitnessScores = new ArrayList<>();
+
+        for (Individual individual : population.individuals) {
+            fitnessScores.add(individual.calculateFitness());
+        }
+        for (float num : fitnessScores) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+        for (int i = 0; i < parentSize; i++) {
+            float max = Collections.max(fitnessScores);
+            fitnessScores.remove(max);
+            System.out.println("Chosen top fitness score: " + max);
+        }
+        System.out.println();
+        for (float num : fitnessScores) {
+            System.out.print(num + " ");
+        }
+        List<Individual> topIndividuals = new ArrayList<>();
+        for (Individual individual : population.individuals) {
+            if (!fitnessScores.contains(individual.fitness)) {
+                topIndividuals.add(individual);
+            }
+        }
+        population.individuals = topIndividuals;
+        System.out.println();
+    }
 }
 
 
