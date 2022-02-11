@@ -27,7 +27,7 @@ public class Main {
 //		}
 
 		try {
-			File file = new File("/Users/mollysunray/OneDrive - Worcester Polytechnic Institute (wpi.edu)/Courses/Junior/CS 4341/Assignments/Assignment2/src/" + fileName);
+			File file = new File("/Users/CAVP/Desktop/C Term/AI_assignment2/src/" + fileName);
 			Scanner scanner = new Scanner(file);
 			int i = 0;
 			List<Float> numbers = new ArrayList<>();
