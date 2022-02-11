@@ -10,20 +10,22 @@ public class GA {
     // the highest scoring individual should be found at the last generation as long as elitism is not 0
 
     public int ga(List<Float> numbers, int puzzle) {
+        int generationCount = 0;
         int size = 10;
         Population population = new Population(size);
         population.initializePopulation(numbers);
         List<Individual> newIndividuals = new ArrayList<>();
+
         // Get fittest individuals from elitism and use those for the next generation
-//        elitism(population);
-        int numRemoved = culling(population);
+        List<Individual> highScoringIndividuals = elitism(population);
+        culling(population);
+
         // Do crossover on remaining individuals and fittest individuals
         System.out.println("newIndividuals size: " + population.individuals.size());
-        newIndividuals.addAll(crossover(size - numRemoved, population.individuals, numbers));
+        newIndividuals.addAll(crossover(size - highScoringIndividuals.size(), population.individuals, numbers));
         System.out.println("newIndividuals size: " + newIndividuals.size());
-        Individual fittest;
-        Individual secondFittest;
-        int generationCount = 0;
+        newIndividuals.addAll(highScoringIndividuals);
+
         return generationCount;
 
 //        public void findTheHighestFitness(int popSize){
@@ -48,7 +50,7 @@ public class GA {
 //        }
 //    }
 
-    public int culling(Population population) {
+    public void culling(Population population) {
         int numToRemove = (int) Math.floor(population.size * 0.3);
         List<Float> fitnessScores = new ArrayList<>();
         for (Individual individual : population.individuals) {
@@ -78,7 +80,6 @@ public class GA {
         population.individuals = individuals;
         System.out.println();
         System.out.println(population.individuals.size());
-        return numToRemove;
     }
 
     public List<Individual> crossover(int size, List<Individual> individuals, List<Float> numbers) {
@@ -240,12 +241,12 @@ public class GA {
             System.out.println();
             System.out.println();
         }
-//        if (numChildren > size) {
-//            result.remove(result.size() - 1);
-//        }
+        if (numChildren > size) {
+            result.remove(result.size() - 1);
+        }
         return result;
     }
-private void elitism(Population population, int parentSize){
+    public List<Individual> elitism(Population population) {
 //        Population topParents=new Population(2, );
 //        for (int i=0; i< parentSize; i++){
 //            int random=(int)(Math.random()*population.getIndividuals().size());
@@ -268,7 +269,7 @@ private void elitism(Population population, int parentSize){
             System.out.print(num + " ");
         }
         System.out.println();
-        for (int i = 0; i < parentSize; i++) {
+        for (int i = 0; i < population.size; i++) {
             float max = Collections.max(fitnessScores);
             fitnessScores.remove(max);
             System.out.println("Chosen top fitness score: " + max);
@@ -285,6 +286,7 @@ private void elitism(Population population, int parentSize){
         }
         population.individuals = topIndividuals;
         System.out.println();
+        return topIndividuals;
     }
 
     public Individual removeDuplicates(Individual child, List<Float> numbers) {
