@@ -1,8 +1,5 @@
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class GA {
 
@@ -22,7 +19,7 @@ public class GA {
         int numRemoved = culling(population);
         // Do crossover on remaining individuals and fittest individuals
         System.out.println("newIndividuals size: " + population.individuals.size());
-        newIndividuals.addAll(crossover(size - numRemoved, population.individuals));
+        newIndividuals.addAll(crossover(size - numRemoved, population.individuals, numbers));
         System.out.println("newIndividuals size: " + newIndividuals.size());
         Individual fittest;
         Individual secondFittest;
@@ -84,7 +81,7 @@ public class GA {
         return numToRemove;
     }
 
-    public List<Individual> crossover(int size, List<Individual> individuals) {
+    public List<Individual> crossover(int size, List<Individual> individuals, List<Float> numbers) {
         DecimalFormat df = new DecimalFormat("#.#");
         ////        ThreadLocalRandom.current().nextInt(min, max + 1);
         List<Individual> result = new ArrayList<>();
@@ -190,6 +187,8 @@ public class GA {
                     parent2.getBin(parent2Bin).set(j, value1);
                 }
             }
+            parent1 = removeDuplicates(parent1, numbers);
+            parent2 = removeDuplicates(parent2, numbers);
 
             result.add(parent1);
             result.add(parent2);
@@ -251,6 +250,14 @@ private void elitism(Population population, int parentSize){
 //        for (int i=0; i< parentSize; i++){
 //            int random=(int)(Math.random()*population.getIndividuals().size());
 //            topParents.getIndividuals().add(population.getASingleIndividual(random));
+
+//    private void elitism(Population pop){
+//        Population top=new Population(topSize, 0, listOfIndiv){
+//            for (int i=0; i<topSize; i++){
+//                float random=(float)(Math.random()*pop.individuals.size());
+//                top.listOfIndiv
+//            }
+//
 //        }
         List<Float> fitnessScores = new ArrayList<>();
 
@@ -278,6 +285,62 @@ private void elitism(Population population, int parentSize){
         }
         population.individuals = topIndividuals;
         System.out.println();
+    }
+
+    public Individual removeDuplicates(Individual child, List<Float> numbers) {
+//        HashMap<Float, Integer> counts = new HashMap<>();
+        List<Float> binValues = new ArrayList<>();
+        List<Float> duplicates = new ArrayList<>();
+        List<Float> missing = new ArrayList<>();
+        binValues.addAll(child.bin1);
+        binValues.addAll(child.bin2);
+        binValues.addAll(child.bin3);
+        binValues.addAll(child.bin4);
+
+        System.out.println();
+        System.out.println();
+        System.out.println("numbers: " + numbers.size());
+        for (float num : numbers) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+        System.out.println("binValues: " + binValues.size());
+        for (float num : binValues) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+        System.out.println();
+
+        for (int i = 0; i < 40; i++) {
+            int count = 0;
+//            counts.put(binValues.get(i), counts.getOrDefault(binValues.get(i), 0) + 1);
+            for (int j = 0; j < 40; j++) {
+                if (numbers.get(i) == binValues.get(j)) {
+                    count++;
+                }
+            }
+            if (count == 0) {
+                missing.add(numbers.get(i));
+            } else if (count > 1) {
+                duplicates.add(numbers.get(i));
+            }
+        }
+
+        System.out.println("Duplicates: " + duplicates.size());
+        System.out.println("Missing: " + missing.size());
+
+        for (int i = 0; i < duplicates.size(); i++) {
+            for (int j = 0; j < binValues.size(); j++) {
+                if (duplicates.get(i) == binValues.get(j)) {
+                    binValues.set(j, missing.get(i));
+                }
+            }
+        }
+        child.bin1 = binValues.subList(0, 10);
+        child.bin2 = binValues.subList(10, 20);
+        child.bin3 = binValues.subList(20, 30);
+        child.bin4 = binValues.subList(30, 40);
+        return child;
     }
 }
 
