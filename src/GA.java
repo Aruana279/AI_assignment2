@@ -297,25 +297,11 @@ private void elitism(Population population, int parentSize){
         binValues.addAll(child.bin3);
         binValues.addAll(child.bin4);
 
-        System.out.println();
-        System.out.println();
-        System.out.println("numbers: " + numbers.size());
-        for (float num : numbers) {
-            System.out.print(num + " ");
-        }
-        System.out.println();
-        System.out.println("binValues: " + binValues.size());
-        for (float num : binValues) {
-            System.out.print(num + " ");
-        }
-        System.out.println();
-        System.out.println();
-
         for (int i = 0; i < 40; i++) {
             int count = 0;
 //            counts.put(binValues.get(i), counts.getOrDefault(binValues.get(i), 0) + 1);
             for (int j = 0; j < 40; j++) {
-                if (numbers.get(i) == binValues.get(j)) {
+                if (numbers.get(i).equals(binValues.get(j))) {
                     count++;
                 }
             }
