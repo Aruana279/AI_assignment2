@@ -39,7 +39,7 @@ public class Main {
 				i++;
 			}
 			GA ga = new GA();
-			ga.ga(numbers, 1);
+			ga.ga(numbers, puzzle, seconds);
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found.");
 			e.printStackTrace();

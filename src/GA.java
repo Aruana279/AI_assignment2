@@ -3,53 +3,51 @@ import java.util.*;
 
 public class GA {
 
-    //elitism
-    //culling
+    // elitism
+    // culling
     // the solution is the four bins for the highest scoring individual
     // print out the score for the highest scoring individual
-    // the highest scoring individual should be found at the last generation as long as elitism is not 0
+    // the highest scoring individual should be found at the last generation as long
+    // as elitism is not 0
 
-    public int ga(List<Float> numbers, int puzzle) {
+    public int ga(List<Float> numbers, int puzzle, int seconds) {
+        long startTime = System.currentTimeMillis() / 1000;
         int size = 10;
+        int NUMSAVED = 2;
+        int NUMREMOVED = 3;
         Population population = new Population(size);
         population.initializePopulation(numbers);
-        List<Individual> newIndividuals = new ArrayList<>();
-        // Get fittest individuals from elitism and use those for the next generation
-//        elitism(population);
-        int numRemoved = culling(population);
-        // Do crossover on remaining individuals and fittest individuals
-        System.out.println("newIndividuals size: " + population.individuals.size());
-        newIndividuals.addAll(crossover(size - numRemoved, population.individuals, numbers));
-        System.out.println("newIndividuals size: " + newIndividuals.size());
-        Individual fittest;
-        Individual secondFittest;
         int generationCount = 0;
+        while (System.currentTimeMillis() / 1000 < startTime + seconds) {
+            System.out.println("\nGENERATION " + generationCount);
+            List<Individual> newIndividuals = new ArrayList<>();
+            // Get fittest individuals from elitism and use those for the next generation
+            List<Individual> topPerformers = elitism(population, NUMSAVED);
+            culling(population, NUMREMOVED);
+            // Do crossover on remaining individuals and fittest individuals
+            System.out.println("Parents after culling: " + population.individuals.size());
+            newIndividuals.addAll(crossover(size - NUMSAVED, population.individuals, numbers));
+            population.individuals = newIndividuals;
+            System.out.println("Children after crossover: " + population.individuals.size());
+            population.individuals.addAll(topPerformers);
+            System.out.println("Children after elitism: " + population.individuals.size());
+            System.out.println("Best Score: " + elitism(population, 1).get(0).calculateFitness());
+            generationCount++;
+        }
         return generationCount;
 
-//        public void findTheHighestFitness(int popSize){
-//            float best=indiv[0].calculateFitness();
-//            for (int i = 1; i < popSize-1; i++){
-//                float temp=indiv[i].calculateFitness();
-//                if (best<temp){
-//                    best=temp;
-//                }
-//            }
-//        }
+        // public void findTheHighestFitness(int popSize){
+        // float best=indiv[0].calculateFitness();
+        // for (int i = 1; i < popSize-1; i++){
+        // float temp=indiv[i].calculateFitness();
+        // if (best<temp){
+        // best=temp;
+        // }
+        // }
+        // }
     }
 
-//    public List<Individual> elitism(Population population) {
-//        int numToKeep = (int) Math.floor(population.size * 0.3);
-//        List<Individual> eliteIndividuals = new ArrayList<>();
-//        float max = Float.MIN_VALUE;
-//
-//        List<Float> fitnessScores = new ArrayList<>();
-//        for (Individual individual : population.individuals) {
-//            fitnessScores.add(individual.calculateFitness());
-//        }
-//    }
-
-    public int culling(Population population) {
-        int numToRemove = (int) Math.floor(population.size * 0.3);
+    public void culling(Population population, int numRemoved) {
         List<Float> fitnessScores = new ArrayList<>();
         for (Individual individual : population.individuals) {
             fitnessScores.add(individual.calculateFitness());
@@ -58,7 +56,7 @@ public class GA {
             System.out.print(num + " ");
         }
         System.out.println();
-        for (int i = 0; i < numToRemove; i++) {
+        for (int i = 0; i < numRemoved; i++) {
             float min = Collections.min(fitnessScores);
             fitnessScores.remove(min);
             System.out.println("Removed: " + min);
@@ -78,20 +76,19 @@ public class GA {
         population.individuals = individuals;
         System.out.println();
         System.out.println(population.individuals.size());
-        return numToRemove;
     }
 
     public List<Individual> crossover(int size, List<Individual> individuals, List<Float> numbers) {
         DecimalFormat df = new DecimalFormat("#.#");
-        ////        ThreadLocalRandom.current().nextInt(min, max + 1);
+        //// ThreadLocalRandom.current().nextInt(min, max + 1);
         List<Individual> result = new ArrayList<>();
         int numChildren = 0;
         while (numChildren < size) {
             Random random = new Random();
-            int parent1Index = random.nextInt(size);
-            int parent2Index = random.nextInt(size);
+            int parent1Index = random.nextInt(individuals.size());
+            int parent2Index = random.nextInt(individuals.size());
             while (parent1Index == parent2Index) {
-                parent1Index = random.nextInt(size);
+                parent1Index = random.nextInt(individuals.size());
             }
             Individual parent1 = individuals.get(parent1Index);
             Individual parent2 = individuals.get(parent2Index);
@@ -108,12 +105,6 @@ public class GA {
                 parent1Bins.add(parent1RandomBin);
             }
 
-            System.out.println("PARENT 1 BIN NUMBERS");
-            for (int num : parent1Bins) {
-                System.out.println(num);
-            }
-            System.out.println();
-
             int parent2RandomBin = random.nextInt(4) + 1;
             parent2Bins.add(parent2RandomBin);
             while (parent2Bins.size() < 4) {
@@ -122,12 +113,6 @@ public class GA {
                 }
                 parent2Bins.add(parent2RandomBin);
             }
-
-            System.out.println("PARENT 2 BIN NUMBERS");
-            for (int num : parent2Bins) {
-                System.out.println(num);
-            }
-            System.out.println();
 
             System.out.println("Before crossover");
             System.out.println("Parent 1");
@@ -240,55 +225,35 @@ public class GA {
             System.out.println();
             System.out.println();
         }
-//        if (numChildren > size) {
-//            result.remove(result.size() - 1);
-//        }
+        if (numChildren > size) {
+            result.remove(result.size() - 1);
+        }
         return result;
     }
-private void elitism(Population population, int parentSize){
-//        Population topParents=new Population(2, );
-//        for (int i=0; i< parentSize; i++){
-//            int random=(int)(Math.random()*population.getIndividuals().size());
-//            topParents.getIndividuals().add(population.getASingleIndividual(random));
 
-//    private void elitism(Population pop){
-//        Population top=new Population(topSize, 0, listOfIndiv){
-//            for (int i=0; i<topSize; i++){
-//                float random=(float)(Math.random()*pop.individuals.size());
-//                top.listOfIndiv
-//            }
-//
-//        }
+    private List<Individual> elitism(Population population, int numSaved) {
         List<Float> fitnessScores = new ArrayList<>();
 
         for (Individual individual : population.individuals) {
             fitnessScores.add(individual.calculateFitness());
         }
-        for (float num : fitnessScores) {
-            System.out.print(num + " ");
-        }
-        System.out.println();
-        for (int i = 0; i < parentSize; i++) {
-            float max = Collections.max(fitnessScores);
-            fitnessScores.remove(max);
-            System.out.println("Chosen top fitness score: " + max);
-        }
-        System.out.println();
-        for (float num : fitnessScores) {
-            System.out.print(num + " ");
-        }
+
         List<Individual> topIndividuals = new ArrayList<>();
-        for (Individual individual : population.individuals) {
-            if (!fitnessScores.contains(individual.fitness)) {
-                topIndividuals.add(individual);
+        for (int i = 0; i < numSaved; i++) {
+            float max = Collections.max(fitnessScores);
+            for (Individual individual : population.individuals) {
+                if (individual.fitness == max) {
+                    topIndividuals.add(individual);
+                    break;
+                }
             }
+            fitnessScores.remove(new Float(max));
         }
-        population.individuals = topIndividuals;
-        System.out.println();
+        return topIndividuals;
     }
 
     public Individual removeDuplicates(Individual child, List<Float> numbers) {
-//        HashMap<Float, Integer> counts = new HashMap<>();
+        // HashMap<Float, Integer> counts = new HashMap<>();
         List<Float> binValues = new ArrayList<>();
         List<Float> duplicates = new ArrayList<>();
         List<Float> missing = new ArrayList<>();
@@ -299,7 +264,7 @@ private void elitism(Population population, int parentSize){
 
         for (int i = 0; i < 40; i++) {
             int count = 0;
-//            counts.put(binValues.get(i), counts.getOrDefault(binValues.get(i), 0) + 1);
+            // counts.put(binValues.get(i), counts.getOrDefault(binValues.get(i), 0) + 1);
             for (int j = 0; j < 40; j++) {
                 if (numbers.get(i).equals(binValues.get(j))) {
                     count++;
@@ -320,8 +285,9 @@ private void elitism(Population population, int parentSize){
         for (int i = 0; i < duplicates.size(); i++) {
             for (int j = 0; j < binValues.size(); j++) {
                 if (binValues.get(j).equals(duplicates.get(i))) {
-                    if (!dupFlag) {  dupFlag = true;  }
-                    else {
+                    if (!dupFlag) {
+                        dupFlag = true;
+                    } else {
                         binValues.set(j, missing.get(count));
                         count++;
                     }
@@ -337,5 +303,3 @@ private void elitism(Population population, int parentSize){
         return child;
     }
 }
-
-
