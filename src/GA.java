@@ -237,7 +237,6 @@ public class GA {
         for (Individual individual : population.individuals) {
             fitnessScores.add(individual.calculateFitness());
         }
-
         List<Individual> topIndividuals = new ArrayList<>();
         for (int i = 0; i < numSaved; i++) {
             float max = Collections.max(fitnessScores);
