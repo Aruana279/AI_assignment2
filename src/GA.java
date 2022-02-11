@@ -20,6 +20,7 @@ public class GA {
         List<Individual> highScoringIndividuals = elitism(population);
         culling(population);
 
+
         // Do crossover on remaining individuals and fittest individuals
         System.out.println("newIndividuals size: " + population.individuals.size());
         newIndividuals.addAll(crossover(size - highScoringIndividuals.size(), population.individuals, numbers));
