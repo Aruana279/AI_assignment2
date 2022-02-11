@@ -19,6 +19,7 @@ public class GA {
         population.initializePopulation(numbers);
         int generationCount = 0;
         while (System.currentTimeMillis() / 1000 < startTime + seconds) {
+        //while (generationCount < 3) {
             System.out.println("\nGENERATION " + generationCount);
             List<Individual> newIndividuals = new ArrayList<>();
             // Get fittest individuals from elitism and use those for the next generation
@@ -26,8 +27,7 @@ public class GA {
             culling(population, NUMREMOVED);
             // Do crossover on remaining individuals and fittest individuals
             System.out.println("Parents after culling: " + population.individuals.size());
-            newIndividuals.addAll(crossover(size - NUMSAVED, population.individuals, numbers));
-            population.individuals = newIndividuals;
+            population.individuals = crossover(size - NUMSAVED, population.individuals, numbers);
             System.out.println("Children after crossover: " + population.individuals.size());
             population.individuals.addAll(topPerformers);
             System.out.println("Children after elitism: " + population.individuals.size());
@@ -61,10 +61,6 @@ public class GA {
             fitnessScores.remove(min);
             System.out.println("Removed: " + min);
         }
-        System.out.println();
-        for (float num : fitnessScores) {
-            System.out.print(num + " ");
-        }
         // Get the individuals whose scores weren't removed
         List<Individual> individuals = new ArrayList<>();
         for (Individual individual : population.individuals) {
@@ -78,9 +74,28 @@ public class GA {
         System.out.println(population.individuals.size());
     }
 
+    private List<Individual> elitism(Population population, int numSaved) {
+        List<Float> fitnessScores = new ArrayList<>();
+
+        for (Individual individual : population.individuals) {
+            fitnessScores.add(individual.calculateFitness());
+        }
+        List<Individual> topIndividuals = new ArrayList<>();
+        for (int i = 0; i < numSaved; i++) {
+            float max = Collections.max(fitnessScores);
+            for (Individual individual : population.individuals) {
+                if (individual.fitness == max) {
+                    topIndividuals.add(individual);
+                    break;
+                }
+            }
+            fitnessScores.remove(new Float(max));
+        }
+        return topIndividuals;
+    }
+
     public List<Individual> crossover(int size, List<Individual> individuals, List<Float> numbers) {
         DecimalFormat df = new DecimalFormat("#.#");
-        //// ThreadLocalRandom.current().nextInt(min, max + 1);
         List<Individual> result = new ArrayList<>();
         int numChildren = 0;
         while (numChildren < size) {
@@ -160,6 +175,18 @@ public class GA {
             System.out.println();
             System.out.println();
 
+            Individual child1 = new Individual();
+            Individual child2 = new Individual();
+            for (int i = 0; i < 10; i++) {
+                child1.bin1.add(parent1.getBin(1).get(i));
+                child1.bin2.add(parent1.getBin(2).get(i));
+                child1.bin3.add(parent1.getBin(3).get(i));
+                child1.bin4.add(parent1.getBin(4).get(i));
+                child2.bin1.add(parent1.getBin(1).get(i));
+                child2.bin2.add(parent1.getBin(2).get(i));
+                child2.bin3.add(parent1.getBin(3).get(i));
+                child2.bin4.add(parent1.getBin(4).get(i));
+            }
             for (int i = 0; i < 4; i++) {
                 int cutPoint = random.nextInt(8) + 1;
                 System.out.println("cut point: " + cutPoint);
@@ -168,58 +195,58 @@ public class GA {
                     int parent2Bin = parent2Bins.get(i);
                     float value1 = parent1.getBin(parent1Bin).get(j);
                     float value2 = parent2.getBin(parent2Bin).get(j);
-                    parent1.getBin(parent1Bin).set(j, value2);
-                    parent2.getBin(parent2Bin).set(j, value1);
+                    child1.getBin(parent1Bin).set(j, value2);
+                    child2.getBin(parent2Bin).set(j, value1);
                 }
             }
-            parent1 = removeDuplicates(parent1, numbers);
-            parent2 = removeDuplicates(parent2, numbers);
+            child1 = removeDuplicates(child1, numbers);
+            child2 = removeDuplicates(child2, numbers);
 
-            result.add(parent1);
-            result.add(parent2);
+            result.add(child1);
+            result.add(child2);
             numChildren += 2;
 
             System.out.println("After crossover");
-            System.out.println("Parent 1");
+            System.out.println("Child 1");
             System.out.print("Bin 1: ");
-            for (float num : parent1.getBin(1)) {
+            for (float num : child1.getBin(1)) {
                 System.out.print(df.format(num) + " ");
             }
             System.out.println();
             System.out.print("Bin 2: ");
-            for (float num : parent1.getBin(2)) {
+            for (float num : child1.getBin(2)) {
                 System.out.print(df.format(num) + " ");
             }
             System.out.println();
             System.out.print("Bin 3: ");
-            for (float num : parent1.getBin(3)) {
+            for (float num : child1.getBin(3)) {
                 System.out.print(df.format(num) + " ");
             }
             System.out.println();
             System.out.print("Bin 4: ");
-            for (float num : parent1.getBin(4)) {
+            for (float num : child1.getBin(4)) {
                 System.out.print(df.format(num) + " ");
             }
             System.out.println();
             System.out.println();
-            System.out.println("Parent 2");
+            System.out.println("Child 2");
             System.out.print("Bin 1: ");
-            for (float num : parent2.getBin(1)) {
+            for (float num : child2.getBin(1)) {
                 System.out.print(df.format(num) + " ");
             }
             System.out.println();
             System.out.print("Bin 2: ");
-            for (float num : parent2.getBin(2)) {
+            for (float num : child2.getBin(2)) {
                 System.out.print(df.format(num) + " ");
             }
             System.out.println();
             System.out.print("Bin 3: ");
-            for (float num : parent2.getBin(3)) {
+            for (float num : child2.getBin(3)) {
                 System.out.print(df.format(num) + " ");
             }
             System.out.println();
             System.out.print("Bin 4: ");
-            for (float num : parent2.getBin(4)) {
+            for (float num : child2.getBin(4)) {
                 System.out.print(df.format(num) + " ");
             }
             System.out.println();
@@ -229,26 +256,6 @@ public class GA {
             result.remove(result.size() - 1);
         }
         return result;
-    }
-
-    private List<Individual> elitism(Population population, int numSaved) {
-        List<Float> fitnessScores = new ArrayList<>();
-
-        for (Individual individual : population.individuals) {
-            fitnessScores.add(individual.calculateFitness());
-        }
-        List<Individual> topIndividuals = new ArrayList<>();
-        for (int i = 0; i < numSaved; i++) {
-            float max = Collections.max(fitnessScores);
-            for (Individual individual : population.individuals) {
-                if (individual.fitness == max) {
-                    topIndividuals.add(individual);
-                    break;
-                }
-            }
-            fitnessScores.remove(new Float(max));
-        }
-        return topIndividuals;
     }
 
     public Individual removeDuplicates(Individual child, List<Float> numbers) {
