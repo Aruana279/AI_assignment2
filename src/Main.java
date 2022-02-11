@@ -27,7 +27,7 @@ public class Main {
 //		}
 
 		try {
-			File file = new File("/Users/CAVP/Desktop/C Term/AI_assignment2/src/" + fileName);
+			File file = new File("/Users/magosheehy/Downloads/" + fileName);
 			Scanner scanner = new Scanner(file);
 			int i = 0;
 			List<Float> numbers = new ArrayList<>();
@@ -46,8 +46,6 @@ public class Main {
 		}
 
 		GA geneticAlg= new GA();
-
-
 
 		//System.out.println(geneticAlg.ga(nmbs, puzzlePassed));
 	}

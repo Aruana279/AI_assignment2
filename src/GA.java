@@ -315,13 +315,21 @@ private void elitism(Population population, int parentSize){
         System.out.println("Duplicates: " + duplicates.size());
         System.out.println("Missing: " + missing.size());
 
+        int count = 0;
+        boolean dupFlag = false;
         for (int i = 0; i < duplicates.size(); i++) {
             for (int j = 0; j < binValues.size(); j++) {
-                if (duplicates.get(i) == binValues.get(j)) {
-                    binValues.set(j, missing.get(i));
+                if (binValues.get(j).equals(duplicates.get(i))) {
+                    if (!dupFlag) {  dupFlag = true;  }
+                    else {
+                        binValues.set(j, missing.get(count));
+                        count++;
+                    }
                 }
             }
+            dupFlag = false;
         }
+
         child.bin1 = binValues.subList(0, 10);
         child.bin2 = binValues.subList(10, 20);
         child.bin3 = binValues.subList(20, 30);
