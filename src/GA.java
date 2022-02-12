@@ -52,14 +52,14 @@ public class GA {
         for (Individual individual : population.individuals) {
             fitnessScores.add(individual.calculateFitness());
         }
-        for (float num : fitnessScores) {
-            System.out.print(num + " ");
-        }
-        System.out.println();
+//        for (float num : fitnessScores) {
+//            System.out.print(num + " ");
+//        }
+//        System.out.println();
         for (int i = 0; i < numRemoved; i++) {
             float min = Collections.min(fitnessScores);
             fitnessScores.remove(min);
-            System.out.println("Removed: " + min);
+//            System.out.println("Removed: " + min);
         }
         // Get the individuals whose scores weren't removed
         List<Individual> individuals = new ArrayList<>();
@@ -74,7 +74,7 @@ public class GA {
         System.out.println(population.individuals.size());
     }
 
-    private List<Individual> elitism(Population population, int numSaved) {
+    public List<Individual> elitism(Population population, int numSaved) {
         List<Float> fitnessScores = new ArrayList<>();
 
         for (Individual individual : population.individuals) {
@@ -129,51 +129,51 @@ public class GA {
                 parent2Bins.add(parent2RandomBin);
             }
 
-            System.out.println("Before crossover");
-            System.out.println("Parent 1");
-            System.out.print("Bin 1: ");
-            for (float num : parent1.getBin(1)) {
-                System.out.print(df.format(num) + " ");
-            }
-            System.out.println();
-            System.out.print("Bin 2: ");
-            for (float num : parent1.getBin(2)) {
-                System.out.print(df.format(num) + " ");
-            }
-            System.out.println();
-            System.out.print("Bin 3: ");
-            for (float num : parent1.getBin(3)) {
-                System.out.print(df.format(num) + " ");
-            }
-            System.out.println();
-            System.out.print("Bin 4: ");
-            for (float num : parent1.getBin(4)) {
-                System.out.print(df.format(num) + " ");
-            }
-            System.out.println();
-            System.out.println();
-            System.out.println("Parent 2");
-            System.out.print("Bin 1: ");
-            for (float num : parent2.getBin(1)) {
-                System.out.print(df.format(num) + " ");
-            }
-            System.out.println();
-            System.out.print("Bin 2: ");
-            for (float num : parent2.getBin(2)) {
-                System.out.print(df.format(num) + " ");
-            }
-            System.out.println();
-            System.out.print("Bin 3: ");
-            for (float num : parent2.getBin(3)) {
-                System.out.print(df.format(num) + " ");
-            }
-            System.out.println();
-            System.out.print("Bin 4: ");
-            for (float num : parent2.getBin(4)) {
-                System.out.print(df.format(num) + " ");
-            }
-            System.out.println();
-            System.out.println();
+//            System.out.println("Before crossover");
+//            System.out.println("Parent 1");
+//            System.out.print("Bin 1: ");
+//            for (float num : parent1.getBin(1)) {
+//                System.out.print(df.format(num) + " ");
+//            }
+//            System.out.println();
+//            System.out.print("Bin 2: ");
+//            for (float num : parent1.getBin(2)) {
+//                System.out.print(df.format(num) + " ");
+//            }
+//            System.out.println();
+//            System.out.print("Bin 3: ");
+//            for (float num : parent1.getBin(3)) {
+//                System.out.print(df.format(num) + " ");
+//            }
+//            System.out.println();
+//            System.out.print("Bin 4: ");
+//            for (float num : parent1.getBin(4)) {
+//                System.out.print(df.format(num) + " ");
+//            }
+//            System.out.println();
+//            System.out.println();
+//            System.out.println("Parent 2");
+//            System.out.print("Bin 1: ");
+//            for (float num : parent2.getBin(1)) {
+//                System.out.print(df.format(num) + " ");
+//            }
+//            System.out.println();
+//            System.out.print("Bin 2: ");
+//            for (float num : parent2.getBin(2)) {
+//                System.out.print(df.format(num) + " ");
+//            }
+//            System.out.println();
+//            System.out.print("Bin 3: ");
+//            for (float num : parent2.getBin(3)) {
+//                System.out.print(df.format(num) + " ");
+//            }
+//            System.out.println();
+//            System.out.print("Bin 4: ");
+//            for (float num : parent2.getBin(4)) {
+//                System.out.print(df.format(num) + " ");
+//            }
+//            System.out.println();
+//            System.out.println();
 
             Individual child1 = new Individual();
             Individual child2 = new Individual();
@@ -189,7 +189,7 @@ public class GA {
             }
             for (int i = 0; i < 4; i++) {
                 int cutPoint = random.nextInt(8) + 1;
-                System.out.println("cut point: " + cutPoint);
+//                System.out.println("cut point: " + cutPoint);
                 for (int j = 0; j < cutPoint; j++) {
                     int parent1Bin = parent1Bins.get(i);
                     int parent2Bin = parent2Bins.get(i);
@@ -206,51 +206,51 @@ public class GA {
             result.add(child2);
             numChildren += 2;
 
-            System.out.println("After crossover");
-            System.out.println("Child 1");
-            System.out.print("Bin 1: ");
-            for (float num : child1.getBin(1)) {
-                System.out.print(df.format(num) + " ");
-            }
-            System.out.println();
-            System.out.print("Bin 2: ");
-            for (float num : child1.getBin(2)) {
-                System.out.print(df.format(num) + " ");
-            }
-            System.out.println();
-            System.out.print("Bin 3: ");
-            for (float num : child1.getBin(3)) {
-                System.out.print(df.format(num) + " ");
-            }
-            System.out.println();
-            System.out.print("Bin 4: ");
-            for (float num : child1.getBin(4)) {
-                System.out.print(df.format(num) + " ");
-            }
-            System.out.println();
-            System.out.println();
-            System.out.println("Child 2");
-            System.out.print("Bin 1: ");
-            for (float num : child2.getBin(1)) {
-                System.out.print(df.format(num) + " ");
-            }
-            System.out.println();
-            System.out.print("Bin 2: ");
-            for (float num : child2.getBin(2)) {
-                System.out.print(df.format(num) + " ");
-            }
-            System.out.println();
-            System.out.print("Bin 3: ");
-            for (float num : child2.getBin(3)) {
-                System.out.print(df.format(num) + " ");
-            }
-            System.out.println();
-            System.out.print("Bin 4: ");
-            for (float num : child2.getBin(4)) {
-                System.out.print(df.format(num) + " ");
-            }
-            System.out.println();
-            System.out.println();
+//            System.out.println("After crossover");
+//            System.out.println("Child 1");
+//            System.out.print("Bin 1: ");
+//            for (float num : child1.getBin(1)) {
+//                System.out.print(df.format(num) + " ");
+//            }
+//            System.out.println();
+//            System.out.print("Bin 2: ");
+//            for (float num : child1.getBin(2)) {
+//                System.out.print(df.format(num) + " ");
+//            }
+//            System.out.println();
+//            System.out.print("Bin 3: ");
+//            for (float num : child1.getBin(3)) {
+//                System.out.print(df.format(num) + " ");
+//            }
+//            System.out.println();
+//            System.out.print("Bin 4: ");
+//            for (float num : child1.getBin(4)) {
+//                System.out.print(df.format(num) + " ");
+//            }
+//            System.out.println();
+//            System.out.println();
+//            System.out.println("Child 2");
+//            System.out.print("Bin 1: ");
+//            for (float num : child2.getBin(1)) {
+//                System.out.print(df.format(num) + " ");
+//            }
+//            System.out.println();
+//            System.out.print("Bin 2: ");
+//            for (float num : child2.getBin(2)) {
+//                System.out.print(df.format(num) + " ");
+//            }
+//            System.out.println();
+//            System.out.print("Bin 3: ");
+//            for (float num : child2.getBin(3)) {
+//                System.out.print(df.format(num) + " ");
+//            }
+//            System.out.println();
+//            System.out.print("Bin 4: ");
+//            for (float num : child2.getBin(4)) {
+//                System.out.print(df.format(num) + " ");
+//            }
+//            System.out.println();
+//            System.out.println();
         }
         if (numChildren > size) {
             result.remove(result.size() - 1);
@@ -259,7 +259,6 @@ public class GA {
     }
 
     public Individual removeDuplicates(Individual child, List<Float> numbers) {
-        // HashMap<Float, Integer> counts = new HashMap<>();
         List<Float> binValues = new ArrayList<>();
         List<Float> duplicates = new ArrayList<>();
         List<Float> missing = new ArrayList<>();
@@ -270,7 +269,6 @@ public class GA {
 
         for (int i = 0; i < 40; i++) {
             int count = 0;
-            // counts.put(binValues.get(i), counts.getOrDefault(binValues.get(i), 0) + 1);
             for (int j = 0; j < 40; j++) {
                 if (numbers.get(i).equals(binValues.get(j))) {
                     count++;
@@ -283,8 +281,9 @@ public class GA {
             }
         }
 
-        System.out.println("Duplicates: " + duplicates.size());
-        System.out.println("Missing: " + missing.size());
+//        System.out.print("Duplicates: " + duplicates.size());
+//        System.out.println(" Missing: " + missing.size());
+//        System.out.println();
 
         int count = 0;
         boolean dupFlag = false;
