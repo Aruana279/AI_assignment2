@@ -2,7 +2,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tower {
+    private int score = 0;
     private List<Piece> pieces = new ArrayList<>();
+
+    public int getScore() {
+        return score;
+    }
+
+    public List<Piece> getPieces() {
+        return pieces;
+    }
+
+    public void setPieces(List<Piece> pieces) {
+        this.pieces = pieces;
+    }
 
     public int calculateScore() {
         // Check rules 1 and 2
@@ -30,7 +43,8 @@ public class Tower {
                 return 0;
             }
         }
-        return 10 + ((int) Math.pow(pieces.size(), 2)) - calculatePieceCost();
+        score = 10 + ((int) Math.pow(pieces.size(), 2)) - calculatePieceCost();
+        return score;
     }
 
     public int calculatePieceCost() {

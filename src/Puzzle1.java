@@ -1,7 +1,7 @@
 import java.text.DecimalFormat;
 import java.util.*;
 
-public class GA {
+public class Puzzle1 {
 
     // elitism
     // culling
@@ -10,7 +10,7 @@ public class GA {
     // the highest scoring individual should be found at the last generation as long
     // as elitism is not 0
 
-    public int ga(List<Float> numbers, int puzzle, int seconds) {
+    public int ga(List<Float> numbers, int seconds) {
         long startTime = System.currentTimeMillis() / 1000;
         int size = 10;
         int NUMSAVED = (int) Math.floor(0.2 * (double) size);

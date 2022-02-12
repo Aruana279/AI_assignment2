@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-	Individual fittest;
-
 	public static void main(String[] args) {
 		if (args.length != 3) {
 			System.out.println("Invalid number of arguments.");
@@ -27,27 +25,38 @@ public class Main {
 //		}
 
 		try {
-			File file = new File("/Users/magosheehy/Downloads/" + fileName);
+			File file = new File("/Users/mollysunray/OneDrive - Worcester Polytechnic Institute (wpi.edu)/Courses/Junior/CS 4341/Assignments/Assignment2/src/" + fileName);
 			Scanner scanner = new Scanner(file);
-			int i = 0;
-			List<Float> numbers = new ArrayList<>();
-//			float[] numbers = new float[40];
-			while (scanner.hasNextLine()) {
-				float number = scanner.nextFloat();
-				numbers.add(number);
-//				numbers[i] = number;
-				i++;
+			if (puzzle == 1) {
+				int i = 0;
+				List<Float> numbers = new ArrayList<>();
+				while (scanner.hasNextLine()) {
+					float number = scanner.nextFloat();
+					numbers.add(number);
+					i++;
+				}
+				Puzzle1 puzzle1 = new Puzzle1();
+				puzzle1.ga(numbers, seconds);
+			} else if (puzzle == 2) {
+				int i = 0;
+				List<Piece> pieces = new ArrayList<>();
+				while (scanner.hasNextLine()) {
+					String data = scanner.nextLine();
+					String[] properties = data.split("\t");
+					String type = properties[0];
+					int width = Integer.parseInt(properties[1]);
+					int strength = Integer.parseInt(properties[2]);
+					int cost = Integer.parseInt(properties[3]);
+					Piece piece = new Piece(type, width, strength, cost);
+					pieces.add(piece);
+				}
+				Puzzle2 puzzle2 = new Puzzle2();
+				puzzle2.ga(pieces, seconds);
 			}
-			GA ga = new GA();
-			ga.ga(numbers, puzzle, seconds);
+
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found.");
 			e.printStackTrace();
 		}
-
-		GA geneticAlg= new GA();
-
-		//System.out.println(geneticAlg.ga(nmbs, puzzlePassed));
 	}
-
 }
