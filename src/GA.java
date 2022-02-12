@@ -26,14 +26,14 @@ public class GA {
             culling(population, NUMREMOVED);
             // Do crossover on remaining individuals and fittest individuals
 //            System.out.println("Parents after culling: " + population.individuals.size());
-            population.individuals = crossover(size - NUMSAVED, population.individuals, numbers);
+            population.setIndividuals(crossover(size - NUMSAVED, population.getIndividuals(), numbers));
 
-            for (Individual individual : population.individuals) {
+            for (Individual individual : population.getIndividuals()) {
                 individual.mutation();
             }
 
 //            System.out.println("Children after crossover: " + population.individuals.size());
-            population.individuals.addAll(topPerformers);
+            population.getIndividuals().addAll(topPerformers);
 //            System.out.println("Children after elitism: " + population.individuals.size());
             System.out.println("Best Score: " + elitism(population, 1).get(0).calculateFitness());
             generationCount++;
@@ -43,7 +43,7 @@ public class GA {
 
     public void culling(Population population, int numRemoved) {
         List<Float> fitnessScores = new ArrayList<>();
-        for (Individual individual : population.individuals) {
+        for (Individual individual : population.getIndividuals()) {
             fitnessScores.add(individual.calculateFitness());
         }
 //        for (float num : fitnessScores) {
@@ -57,28 +57,28 @@ public class GA {
         }
         // Get the individuals whose scores weren't removed
         List<Individual> individuals = new ArrayList<>();
-        for (Individual individual : population.individuals) {
-            if (fitnessScores.contains(individual.fitness)) {
+        for (Individual individual : population.getIndividuals()) {
+            if (fitnessScores.contains(individual.getFitness())) {
                 individuals.add(individual);
             }
         }
         // Reset the individuals for the population
-        population.individuals = individuals;
+        population.setIndividuals(individuals);
         System.out.println();
-        System.out.println(population.individuals.size());
+        System.out.println(population.getIndividuals().size());
     }
 
     public List<Individual> elitism(Population population, int numSaved) {
         List<Float> fitnessScores = new ArrayList<>();
 
-        for (Individual individual : population.individuals) {
+        for (Individual individual : population.getIndividuals()) {
             fitnessScores.add(individual.calculateFitness());
         }
         List<Individual> topIndividuals = new ArrayList<>();
         for (int i = 0; i < numSaved; i++) {
             float max = Collections.max(fitnessScores);
-            for (Individual individual : population.individuals) {
-                if (individual.fitness == max) {
+            for (Individual individual : population.getIndividuals()) {
+                if (individual.getFitness() == max) {
                     topIndividuals.add(individual);
                     break;
                 }
@@ -192,14 +192,14 @@ public class GA {
             Individual child1 = new Individual();
             Individual child2 = new Individual();
             for (int i = 0; i < 10; i++) {
-                child1.bin1.add(parent1.getBin(1).get(i));
-                child1.bin2.add(parent1.getBin(2).get(i));
-                child1.bin3.add(parent1.getBin(3).get(i));
-                child1.bin4.add(parent1.getBin(4).get(i));
-                child2.bin1.add(parent1.getBin(1).get(i));
-                child2.bin2.add(parent1.getBin(2).get(i));
-                child2.bin3.add(parent1.getBin(3).get(i));
-                child2.bin4.add(parent1.getBin(4).get(i));
+                child1.getBin1().add(parent1.getBin(1).get(i));
+                child1.getBin2().add(parent1.getBin(2).get(i));
+                child1.getBin3().add(parent1.getBin(3).get(i));
+                child1.getBin4().add(parent1.getBin(4).get(i));
+                child2.getBin1().add(parent1.getBin(1).get(i));
+                child2.getBin2().add(parent1.getBin(2).get(i));
+                child2.getBin3().add(parent1.getBin(3).get(i));
+                child2.getBin4().add(parent1.getBin(4).get(i));
             }
             for (int i = 0; i < 4; i++) {
                 int cutPoint = random.nextInt(8) + 1;
@@ -276,10 +276,10 @@ public class GA {
         List<Float> binValues = new ArrayList<>();
         List<Float> duplicates = new ArrayList<>();
         List<Float> missing = new ArrayList<>();
-        binValues.addAll(child.bin1);
-        binValues.addAll(child.bin2);
-        binValues.addAll(child.bin3);
-        binValues.addAll(child.bin4);
+        binValues.addAll(child.getBin1());
+        binValues.addAll(child.getBin2());
+        binValues.addAll(child.getBin3());
+        binValues.addAll(child.getBin4());
 
         for (int i = 0; i < 40; i++) {
             int count = 0;
@@ -315,10 +315,10 @@ public class GA {
             dupFlag = false;
         }
 
-        child.bin1 = binValues.subList(0, 10);
-        child.bin2 = binValues.subList(10, 20);
-        child.bin3 = binValues.subList(20, 30);
-        child.bin4 = binValues.subList(30, 40);
+        child.setBin1(binValues.subList(0, 10));
+        child.setBin2(binValues.subList(10, 20));
+        child.setBin3(binValues.subList(20, 30));
+        child.setBin4(binValues.subList(30, 40));
         return child;
     }
 }

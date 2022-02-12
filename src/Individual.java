@@ -3,13 +3,49 @@ import java.util.List;
 import java.util.Random;
 
 public class Individual {
-    float fitness = 0;
-    List<Float> bin1 = new ArrayList<>();
-    List<Float> bin2 = new ArrayList<>();
-    List<Float> bin3 = new ArrayList<>();
-    List<Float> bin4 = new ArrayList<>();
+    private float fitness = 0;
+    private List<Float> bin1 = new ArrayList<>();
+    private List<Float> bin2 = new ArrayList<>();
+    private List<Float> bin3 = new ArrayList<>();
+    private List<Float> bin4 = new ArrayList<>();
 
     public Individual() {
+    }
+
+    public float getFitness() {
+        return fitness;
+    }
+
+    public List<Float> getBin1() {
+        return bin1;
+    }
+
+    public List<Float> getBin2() {
+        return bin2;
+    }
+
+    public List<Float> getBin3() {
+        return bin3;
+    }
+
+    public List<Float> getBin4() {
+        return bin4;
+    }
+
+    public void setBin1(List<Float> bin1) {
+        this.bin1 = bin1;
+    }
+
+    public void setBin2(List<Float> bin2) {
+        this.bin2 = bin2;
+    }
+
+    public void setBin3(List<Float> bin3) {
+        this.bin3 = bin3;
+    }
+
+    public void setBin4(List<Float> bin4) {
+        this.bin4 = bin4;
     }
 
     public float calculateFitness() {

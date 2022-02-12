@@ -3,12 +3,20 @@ import java.util.Collections;
 import java.util.List;
 
 public class Population {
-    int size;
-    List<Individual> individuals;
+    private int size;
+    private List<Individual> individuals;
 
     public Population(int size) {
         this.size = size;
         this.individuals = new ArrayList<>();
+    }
+
+    public List<Individual> getIndividuals() {
+        return individuals;
+    }
+
+    public void setIndividuals(List<Individual> individuals) {
+        this.individuals = individuals;
     }
 
     public void initializePopulation(List<Float> numbers) {
@@ -23,7 +31,7 @@ public class Population {
             int index = 0;
             // Populate bin 1 with 10 numbers
             for (int j = 0; j < 10; j++) {
-                individual.bin1.add(numbers.get(j));
+                individual.getBin1().add(numbers.get(j));
 //                System.out.print(individual.bin1.get(index) + " ");
                 index++;
             }
@@ -33,7 +41,7 @@ public class Population {
             index = 0;
             // Populate bin 2 with 10 numbers
             for (int j = 10; j < 20; j++) {
-                individual.bin2.add(numbers.get(j));
+                individual.getBin2().add(numbers.get(j));
 //                System.out.print(individual.bin2.get(index) + " ");
                 index++;
             }
@@ -43,7 +51,7 @@ public class Population {
             index = 0;
             // Populate bin 3 with 10 numbers
             for (int j = 20; j < 30; j++) {
-                individual.bin3.add(numbers.get(j));
+                individual.getBin3().add(numbers.get(j));
 //                System.out.print(individual.bin3.get(index) + " ");
                 index++;
             }
@@ -53,7 +61,7 @@ public class Population {
             index = 0;
             // Populate bin 4 with 10 numbers
             for (int j = 30; j < 40; j++) {
-                individual.bin4.add(numbers.get(j));
+                individual.getBin4().add(numbers.get(j));
 //                System.out.print(individual.bin4.get(index) + " ");
                 index++;
             }
