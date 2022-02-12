@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Individual {
     float fitness = 0;
@@ -48,5 +49,16 @@ public class Individual {
         } else {
             return bin4;
         }
+    }
+
+    public void mutation() {
+        Random random = new Random();
+        int index = random.nextInt(10);
+        int randomBin1 = random.nextInt(4) + 1;
+        int randomBin2 = random.nextInt(4) + 1;
+        float bin1Value = getBin(randomBin1).get(index);
+        float bin2Value = getBin(randomBin2).get(index);
+        getBin(randomBin2).set(index, bin1Value);
+        getBin(randomBin1).set(index, bin2Value);
     }
 }

@@ -25,11 +25,16 @@ public class GA {
             List<Individual> topPerformers = elitism(population, NUMSAVED);
             culling(population, NUMREMOVED);
             // Do crossover on remaining individuals and fittest individuals
-            System.out.println("Parents after culling: " + population.individuals.size());
+//            System.out.println("Parents after culling: " + population.individuals.size());
             population.individuals = crossover(size - NUMSAVED, population.individuals, numbers);
-            System.out.println("Children after crossover: " + population.individuals.size());
+
+            for (Individual individual : population.individuals) {
+                individual.mutation();
+            }
+
+//            System.out.println("Children after crossover: " + population.individuals.size());
             population.individuals.addAll(topPerformers);
-            System.out.println("Children after elitism: " + population.individuals.size());
+//            System.out.println("Children after elitism: " + population.individuals.size());
             System.out.println("Best Score: " + elitism(population, 1).get(0).calculateFitness());
             generationCount++;
         }
