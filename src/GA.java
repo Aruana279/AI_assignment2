@@ -12,16 +12,15 @@ public class GA {
 
     public int ga(List<Float> numbers, int puzzle, int seconds) {
         long startTime = System.currentTimeMillis() / 1000;
-        int size = 100;
+        int size = 10;
         int NUMSAVED = (int) Math.floor(0.2 * (double) size);
         int NUMREMOVED = (int) Math.floor(0.3 * (double) size);
         Population population = new Population(size);
         population.initializePopulation(numbers);
         int generationCount = 0;
         while (System.currentTimeMillis() / 1000 < startTime + seconds) {
-        //while (generationCount < 10) {
+            // while (generationCount < 10) {
             System.out.println("\nGENERATION " + generationCount);
-            List<Individual> newIndividuals = new ArrayList<>();
             // Get fittest individuals from elitism and use those for the next generation
             List<Individual> topPerformers = elitism(population, NUMSAVED);
             culling(population, NUMREMOVED);
@@ -35,16 +34,6 @@ public class GA {
             generationCount++;
         }
         return generationCount;
-
-        // public void findTheHighestFitness(int popSize){
-        // float best=indiv[0].calculateFitness();
-        // for (int i = 1; i < popSize-1; i++){
-        // float temp=indiv[i].calculateFitness();
-        // if (best<temp){
-        // best=temp;
-        // }
-        // }
-        // }
     }
 
     public void culling(Population population, int numRemoved) {
@@ -98,12 +87,32 @@ public class GA {
         DecimalFormat df = new DecimalFormat("#.#");
         List<Individual> result = new ArrayList<>();
         int numChildren = 0;
+        List<Float> fitnessScores = new ArrayList<>();
+        float fitnessSum = 0;
+        for (int i = 0; i < individuals.size(); i++) {
+            float tempFit = individuals.get(i).calculateFitness();
+            fitnessSum += tempFit;
+            fitnessScores.add(fitnessSum);
+        }
         while (numChildren < size) {
             Random random = new Random();
-            int parent1Index = random.nextInt(individuals.size());
-            int parent2Index = random.nextInt(individuals.size());
+            int parent1Index = 0;
+            float parent1Prob = random.nextFloat() * fitnessScores.get(fitnessScores.size() - 1);
+            for (int i = 0; i < individuals.size(); i++) {
+                if (fitnessScores.get(i) >= parent1Prob) {
+                    parent1Index = i;
+                    break;
+                }
+            }
+            int parent2Index = parent1Index;
             while (parent1Index == parent2Index) {
-                parent1Index = random.nextInt(individuals.size());
+                float parent2Prob = random.nextFloat() * fitnessScores.get(fitnessScores.size() - 1);
+                for (int i = 0; i < individuals.size(); i++) {
+                    if (fitnessScores.get(i) >= parent2Prob) {
+                        parent2Index = i;
+                        break;
+                    }
+                }
             }
             Individual parent1 = individuals.get(parent1Index);
             Individual parent2 = individuals.get(parent2Index);
