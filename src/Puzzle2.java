@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class Puzzle2 {
     public void ga(List<Piece> pieces, int seconds) {
@@ -17,6 +18,8 @@ public class Puzzle2 {
             List<Tower> topPerformers = elitism(population, NUMSAVED);
             culling(population, NUMREMOVED);
             population.setTowers(crossover(size - NUMSAVED, population.getTowers(), pieces));
+            population.getTowers().addAll(topPerformers);
+            System.out.println("Best Score: " + elitism(population, 1).get(0).calculateScore());
             generationCount++;
         }
     }
@@ -32,7 +35,7 @@ public class Puzzle2 {
 //        System.out.println();
         for (int i = 0; i < numRemoved; i++) {
             int min = Collections.min(scores);
-            scores.remove(min);
+            scores.remove(new Integer(min));
 //            System.out.println("Removed: " + min);
         }
         // Get the individuals whose scores weren't removed
@@ -70,6 +73,133 @@ public class Puzzle2 {
 
     public List<Tower> crossover(int size, List<Tower> individuals, List<Piece> pieces) {
         List<Tower> result = new ArrayList<>();
+        int numChildren = 0;
+        List<Float> scores = new ArrayList<>();
+        float fitnessSum = 0;
+        for (int i = 0; i < individuals.size(); i++) {
+            float tempFit = individuals.get(i).calculateScore();
+            fitnessSum += tempFit;
+            scores.add(fitnessSum);
+        }
+        while (numChildren < size) {
+            Random random = new Random();
+            int parent1Index = random.nextInt(individuals.size());
+            int parent2Index = random.nextInt(individuals.size());
+            while (parent1Index == parent2Index) {
+                parent1Index = random.nextInt(individuals.size());
+            }
+
+            // Randomly selected parents
+            Tower parent1 = individuals.get(parent1Index);
+            Tower parent2 = individuals.get(parent2Index);
+
+            System.out.println("Parent 1:");
+            for (int i = 0; i < parent1.getPieces().size(); i++) {
+                Piece piece = parent1.getPieces().get(i);
+                System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
+            }
+            System.out.println();
+            System.out.println("Parent 2:");
+            for (int i = 0; i < parent2.getPieces().size(); i++) {
+                Piece piece = parent2.getPieces().get(i);
+                System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
+            }
+
+            // Randomly selected cut points
+            int cutPoint1 = random.nextInt(parent1.getPieces().size());
+            int cutPoint2 = random.nextInt(parent2.getPieces().size());
+
+            Tower child1 = new Tower();
+            Tower child2 = new Tower();
+
+            for (int i = 0; i < cutPoint2; i++) {
+                child1.getPieces().add(parent2.getPieces().get(i));
+            }
+            for (int i = cutPoint1; i < parent1.getPieces().size(); i++) {
+                child1.getPieces().add(parent1.getPieces().get(i));
+            }
+            for (int i = 0; i < cutPoint1; i++) {
+                child2.getPieces().add(parent1.getPieces().get(i));
+            }
+            for (int i = cutPoint2; i < parent2.getPieces().size(); i++) {
+                child2.getPieces().add(parent2.getPieces().get(i));
+            }
+            child1 = removeDuplicates(child1, pieces);
+            child2 = removeDuplicates(child2, pieces);
+
+            System.out.println();
+            System.out.println("Child 1:");
+            for (int i = 0; i < child1.getPieces().size(); i++) {
+                Piece piece = child1.getPieces().get(i);
+                System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
+            }
+            System.out.println();
+            System.out.println("Child 2:");
+            for (int i = 0; i < child2.getPieces().size(); i++) {
+                Piece piece = child2.getPieces().get(i);
+                System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
+            }
+            System.out.println();
+            /*
+            int piece1Index = random.nextInt(parent1.getPieces().size());
+            int piece2Index = random.nextInt(parent2.getPieces().size());
+            Piece piece1 = parent1.getPieces().get(piece1Index);
+            Piece piece2 = parent2.getPieces().get(piece2Index);
+            parent1.getPieces().add(piece1Index, piece2);
+            parent2.getPieces().add(piece2Index, piece1);
+             */
+
+            result.add(child1);
+            result.add(child2);
+            numChildren += 2;
+        }
         return result;
+    }
+
+    public Tower removeDuplicates(Tower child, List<Piece> pieces) {
+        List<Piece> duplicates = new ArrayList<>();
+        List<Piece> missing = new ArrayList<>();
+        List<Piece> childPieces = child.getPieces();
+        for (Piece piece : pieces) {
+            int count = 0;
+            for (Piece childPiece : childPieces) {
+                if (piece.equals(childPiece)) {
+                    count++;
+                }
+            }
+            if (count == 0) {
+                missing.add(piece);
+            } else if (count > 1) {
+                duplicates.add(piece);
+            }
+        }
+        System.out.println("DUPLICATES: " + duplicates.size());
+        System.out.println("MISSING: " + missing.size());
+
+        int count = 0;
+        boolean dupFlag = false;
+        List<Piece> toRemove = new ArrayList<>();
+        for (int i = 0; i < duplicates.size(); i++) {
+            for (int j = 0; j < childPieces.size(); j++) {
+                if (childPieces.get(j).equals(duplicates.get(i))) {
+                    if (!dupFlag) {
+                        dupFlag = true;
+                    } else {
+                        // Replace duplicates with missing values
+                        // If there are no missing values left, remove the piece
+                        if (count < missing.size()) {
+                            childPieces.set(j, missing.get(count));
+                        } else {
+                            toRemove.add(childPieces.get(j));
+                        }
+                        count++;
+                    }
+                }
+            }
+            dupFlag = false;
+        }
+        childPieces.removeAll(toRemove);
+
+        return child;
     }
 }

@@ -2,8 +2,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tower {
-    private int score = 0;
-    private List<Piece> pieces = new ArrayList<>();
+    private int score;
+    private List<Piece> pieces;
+
+    public Tower() {
+        this.pieces = new ArrayList<>();
+    }
 
     public int getScore() {
         return score;
@@ -19,15 +23,15 @@ public class Tower {
 
     public int calculateScore() {
         // Check rules 1 and 2
-        if (!pieces.get(0).getType().equals("door")) {
+        if (!pieces.get(0).getType().equals("Door")) {
             return 0;
-        } else if (!pieces.get(pieces.size() - 1).getType().equals("lookout")) {
+        } else if (!pieces.get(pieces.size() - 1).getType().equals("Lookout")) {
             return 0;
         }
         // Check rule 3
         // Exclude the first and last pieces since they shouldn't be walls
         for (int i = 1; i < pieces.size() - 1; i++) {
-            if (!pieces.get(i).getType().equals("wall")) {
+            if (!pieces.get(i).getType().equals("Wall")) {
                 return 0;
             }
         }
@@ -42,6 +46,12 @@ public class Tower {
             if (pieces.get(i).getStrength() < pieces.size() - 1 - i) {
                 return 0;
             }
+        }
+        if (pieces.get(0).getType().equals("Door")) {
+            score += 10;
+        }
+        if (pieces.get(pieces.size() - 1).getType().equals("Lookout")) {
+            score += 10;
         }
         score = 10 + ((int) Math.pow(pieces.size(), 2)) - calculatePieceCost();
         return score;
