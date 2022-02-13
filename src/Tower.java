@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Tower {
     private int score;
@@ -20,6 +21,17 @@ public class Tower {
     public void setPieces(List<Piece> pieces) {
         this.pieces = pieces;
     }
+
+//    public int calculateFitness() {
+//        int fitness = calculateScore();
+//        if (pieces.get(0).getType().equals("Door")) {
+//            fitness += 10;
+//        }
+//        if (pieces.get(pieces.size() - 1).getType().equals("Lookout")) {
+//            fitness += 10;
+//        }
+//        return fitness;
+//    }
 
     public int calculateScore() {
         // Check rules 1 and 2
@@ -57,5 +69,16 @@ public class Tower {
             cost += piece.getCost();
         }
         return cost;
+    }
+
+    public void mutation() {
+        Random random = new Random();
+        System.out.println(pieces.size());
+        int piece1Index = random.nextInt(pieces.size());
+        int piece2Index = random.nextInt(pieces.size());
+        Piece piece1 = pieces.get(piece1Index);
+        Piece piece2 = pieces.get(piece2Index);
+        pieces.add(piece1Index, piece2);
+        pieces.add(piece2Index, piece1);
     }
 }

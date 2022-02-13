@@ -5,6 +5,7 @@ import java.util.Random;
 
 public class Puzzle2 {
     public void ga(List<Piece> pieces, int seconds) {
+        Random random = new Random();
         long startTime = System.currentTimeMillis() / 1000;
         int size = 10;
         int NUMSAVED = (int) Math.floor(0.2 * (double) size);
@@ -13,11 +14,25 @@ public class Puzzle2 {
         population.initializePopulation(pieces);
         int generationCount = 0;
         while (System.currentTimeMillis() / 1000 < startTime + seconds) {
+//             while (generationCount < 10) {
             System.out.println("\nGENERATION " + generationCount);
             // Get fittest individuals from elitism and use those for the next generation
             List<Tower> topPerformers = elitism(population, NUMSAVED);
             culling(population, NUMREMOVED);
             population.setTowers(crossover(size - NUMSAVED, population.getTowers(), pieces));
+
+
+            for (Tower individual : population.getTowers()) {
+                for (int i = 0; i < individual.getPieces().size(); i++) {
+                    Piece piece = individual.getPieces().get(i);
+                    System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
+                }
+                System.out.println();
+                if (random.nextInt(10) < 3) {
+                    individual.mutation();
+                }
+            }
+
             population.getTowers().addAll(topPerformers);
             System.out.println("Best Score: " + elitism(population, 1).get(0).calculateScore());
             generationCount++;
@@ -156,14 +171,6 @@ public class Puzzle2 {
                 System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
             }
             System.out.println();
-            /*
-            int piece1Index = random.nextInt(parent1.getPieces().size());
-            int piece2Index = random.nextInt(parent2.getPieces().size());
-            Piece piece1 = parent1.getPieces().get(piece1Index);
-            Piece piece2 = parent2.getPieces().get(piece2Index);
-            parent1.getPieces().add(piece1Index, piece2);
-            parent2.getPieces().add(piece2Index, piece1);
-             */
 
             result.add(child1);
             result.add(child2);
@@ -189,8 +196,8 @@ public class Puzzle2 {
                 duplicates.add(piece);
             }
         }
-        System.out.println("DUPLICATES: " + duplicates.size());
-        System.out.println("MISSING: " + missing.size());
+//        System.out.println("DUPLICATES: " + duplicates.size());
+//        System.out.println("MISSING: " + missing.size());
 
         int count = 0;
         boolean dupFlag = false;

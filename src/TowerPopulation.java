@@ -22,7 +22,7 @@ public class TowerPopulation {
     public void initializePopulation(List<Piece> pieces) {
         Random random = new Random();
         for (int i = 0; i < size; i++) {
-            int height = random.nextInt(pieces.size() - 2) + 2;
+            int height = random.nextInt(pieces.size() - 1) + 1;
             Tower tower = new Tower();
             List<Piece> towerPieces = new ArrayList<>();
             for (int j = 0; j < height; j++) {
