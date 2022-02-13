@@ -92,7 +92,6 @@ public class Puzzle1 {
     }
 
     public List<Individual> crossover(int size, List<Individual> individuals, List<Float> numbers) {
-        DecimalFormat df = new DecimalFormat("#.#");
         List<Individual> result = new ArrayList<>();
         int numChildren = 0;
         List<Float> defaultScores = new ArrayList<>();
