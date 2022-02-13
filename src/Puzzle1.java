@@ -52,6 +52,7 @@ public class Puzzle1 {
 //        System.out.println();
         for (int i = 0; i < numRemoved; i++) {
             float min = Collections.min(fitnessScores);
+            
             fitnessScores.remove(min);
 //            System.out.println("Removed: " + min);
         }
@@ -65,7 +66,6 @@ public class Puzzle1 {
         // Reset the individuals for the population
         population.setIndividuals(individuals);
         System.out.println();
-        System.out.println(population.getIndividuals().size());
     }
 
     public List<Individual> elitism(Population population, int numSaved) {
@@ -92,10 +92,16 @@ public class Puzzle1 {
         DecimalFormat df = new DecimalFormat("#.#");
         List<Individual> result = new ArrayList<>();
         int numChildren = 0;
+        List<Float> defaultScores = new ArrayList<>();
+        for (int i = 0; i < individuals.size(); i++) {
+            defaultScores.add(individuals.get(i).calculateFitness());
+        }
+        Float minScore = Collections.min(defaultScores);
+        if (minScore > 0) {  minScore = new Float(0);  }
         List<Float> fitnessScores = new ArrayList<>();
         float fitnessSum = 0;
         for (int i = 0; i < individuals.size(); i++) {
-            float tempFit = individuals.get(i).calculateFitness();
+            float tempFit = individuals.get(i).calculateFitness() - minScore;
             fitnessSum += tempFit;
             fitnessScores.add(fitnessSum);
         }

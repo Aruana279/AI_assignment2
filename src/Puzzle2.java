@@ -17,6 +17,7 @@ public class Puzzle2 {
             List<Tower> topPerformers = elitism(population, NUMSAVED);
             culling(population, NUMREMOVED);
             population.setTowers(crossover(size - NUMSAVED, population.getTowers(), pieces));
+            generationCount++;
         }
     }
 

@@ -25,7 +25,8 @@ public class Main {
 //		}
 
 		try {
-			File file = new File("/Users/mollysunray/OneDrive - Worcester Polytechnic Institute (wpi.edu)/Courses/Junior/CS 4341/Assignments/Assignment2/src/" + fileName);
+			//File file = new File("/Users/mollysunray/OneDrive - Worcester Polytechnic Institute (wpi.edu)/Courses/Junior/CS 4341/Assignments/Assignment2/src/" + fileName);
+			File file = new File("/Users/magosheehy/Downloads/" + fileName);
 			Scanner scanner = new Scanner(file);
 			if (puzzle == 1) {
 				int i = 0;
