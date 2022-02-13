@@ -83,10 +83,26 @@ public class Puzzle2 {
         }
         while (numChildren < size) {
             Random random = new Random();
-            int parent1Index = random.nextInt(individuals.size());
-            int parent2Index = random.nextInt(individuals.size());
+            int parent1Index = 0;
+            float parent1Prob = random.nextFloat() * scores.get(scores.size() - 1);
+            for (int i = 0; i < individuals.size(); i++) {
+                if (scores.get(i) >= parent1Prob) {
+                    parent1Index = i;
+                    break;
+                }
+            }
+            int parent2Index = parent1Index;
             while (parent1Index == parent2Index) {
-                parent1Index = random.nextInt(individuals.size());
+                float parent2Prob = random.nextFloat() * scores.get(scores.size() - 1);
+                for (int i = 0; i < individuals.size(); i++) {
+                    if (scores.get(i) >= parent2Prob) {
+                        parent2Index = i;
+                        break;
+                    }
+                }
+                if (parent1Index == parent2Index && parent2Index < scores.size() - 2) {
+                    parent2Index++;
+                }
             }
 
             // Randomly selected parents

@@ -11,6 +11,7 @@ public class Puzzle1 {
     // as elitism is not 0
 
     public int ga(List<Float> numbers, int seconds) {
+        Random random = new Random();
         long startTime = System.currentTimeMillis() / 1000;
         int size = 10;
         int NUMSAVED = (int) Math.floor(0.2 * (double) size);
@@ -29,7 +30,9 @@ public class Puzzle1 {
             population.setIndividuals(crossover(size - NUMSAVED, population.getIndividuals(), numbers));
 
             for (Individual individual : population.getIndividuals()) {
-                individual.mutation();
+                if (random.nextInt(10) < 3){
+                    individual.mutation();
+                }
             }
 
 //            System.out.println("Children after crossover: " + population.individuals.size());

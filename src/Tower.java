@@ -47,12 +47,6 @@ public class Tower {
                 return 0;
             }
         }
-        if (pieces.get(0).getType().equals("Door")) {
-            score += 10;
-        }
-        if (pieces.get(pieces.size() - 1).getType().equals("Lookout")) {
-            score += 10;
-        }
         score = 10 + ((int) Math.pow(pieces.size(), 2)) - calculatePieceCost();
         return score;
     }
