@@ -112,7 +112,6 @@ public class Puzzle2 {
                 for (int i = 0; i < individuals.size(); i++) {
                     if (scores.get(i) > parent2Prob || scores.get(i).equals(parent1Prob)) {
                         parent2Index = i;
-                        System.out.print(parent2Index);
                         break;
                     }
                 }
