@@ -85,7 +85,7 @@ public class Tower {
         int piece2Index = random.nextInt(pieces.size());
         Piece piece1 = pieces.get(piece1Index);
         Piece piece2 = pieces.get(piece2Index);
-        pieces.add(piece1Index, piece2);
-        pieces.add(piece2Index, piece1);
+        pieces.set(piece1Index, piece2);
+        pieces.set(piece2Index, piece1);
     }
 }

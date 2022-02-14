@@ -211,7 +211,6 @@ public class Puzzle2 {
         }
 //        System.out.println("DUPLICATES: " + duplicates.size());
 //        System.out.println("MISSING: " + missing.size());
-
         int count = 0;
         boolean dupFlag = false;
         List<Piece> toRemove = new ArrayList<>();
