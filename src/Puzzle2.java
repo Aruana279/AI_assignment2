@@ -14,7 +14,7 @@ public class Puzzle2 {
         population.initializePopulation(pieces);
         int generationCount = 0;
         while (System.currentTimeMillis() / 1000 < startTime + seconds) {
-//             while (generationCount < 10) {
+        //while (generationCount < 2) {
             System.out.println("\nGENERATION " + generationCount);
             // Get fittest individuals from elitism and use those for the next generation
             List<Tower> topPerformers = elitism(population, NUMSAVED);
@@ -110,16 +110,21 @@ public class Puzzle2 {
             while (parent1Index == parent2Index) {
                 float parent2Prob = random.nextFloat() * scores.get(scores.size() - 1);
                 for (int i = 0; i < individuals.size(); i++) {
-                    if (scores.get(i) >= parent2Prob) {
+                    if (scores.get(i) > parent2Prob || scores.get(i).equals(parent1Prob)) {
                         parent2Index = i;
+                        System.out.print(parent2Index);
                         break;
                     }
                 }
-                if (parent1Index == parent2Index && parent2Index < scores.size() - 2) {
-                    parent2Index++;
+                if (parent1Index == parent2Index) {
+                    if (parent2Index < scores.size() - 1 && scores.get(parent2Index).equals(scores.get(parent2Index + 1))) {
+                        parent2Index++;
+                    }
+                    else if (parent2Index == scores.size() - 1 && scores.get(parent2Index - 1) == 0.0){
+                        parent2Index--;
+                    }
                 }
             }
-
             // Randomly selected parents
             Tower parent1 = individuals.get(parent1Index);
             Tower parent2 = individuals.get(parent2Index);
