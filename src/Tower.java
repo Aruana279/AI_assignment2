@@ -34,31 +34,38 @@ public class Tower {
 //    }
 
     public int calculateScore() {
+//        System.out.print("Piece cost: " + calculatePieceCost());
         // Check rules 1 and 2
         if (!pieces.get(0).getType().equals("Door")) {
+//            System.out.println(" invalid");
             return 0;
         } else if (!pieces.get(pieces.size() - 1).getType().equals("Lookout")) {
+//            System.out.println(" invalid");
             return 0;
         }
         // Check rule 3
         // Exclude the first and last pieces since they shouldn't be walls
         for (int i = 1; i < pieces.size() - 1; i++) {
             if (!pieces.get(i).getType().equals("Wall")) {
+//                System.out.println(" invalid");
                 return 0;
             }
         }
         // Check rule 4
         for (int i = 0; i < pieces.size() - 1; i++) {
             if (pieces.get(i).getWidth() < pieces.get(i + 1).getWidth()) {
+//                System.out.println(" invalid");
                 return 0;
             }
         }
         // Check rule 5
         for (int i = 0; i < pieces.size(); i++) {
             if (pieces.get(i).getStrength() < pieces.size() - 1 - i) {
+//                System.out.println(" invalid");
                 return 0;
             }
         }
+//        System.out.println(" valid");
         score = 10 + ((int) Math.pow(pieces.size(), 2)) - calculatePieceCost();
         return score;
     }

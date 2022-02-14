@@ -23,17 +23,23 @@ public class Puzzle2 {
 
 
             for (Tower individual : population.getTowers()) {
-                for (int i = 0; i < individual.getPieces().size(); i++) {
-                    Piece piece = individual.getPieces().get(i);
-                    System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
-                }
-                System.out.println();
                 if (random.nextInt(10) < 3) {
                     individual.mutation();
+                    System.out.println("MUTATION OCCURRED");
                 }
             }
 
             population.getTowers().addAll(topPerformers);
+
+            for (Tower individual : population.getTowers()) {
+                for (int i = 0; i < individual.getPieces().size(); i++) {
+                    Piece piece = individual.getPieces().get(i);
+                    System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
+                }
+                System.out.println("Score: " + individual.calculateScore());
+                System.out.println();
+            }
+
             System.out.println("Best Score: " + elitism(population, 1).get(0).calculateScore());
             generationCount++;
         }
@@ -128,17 +134,17 @@ public class Puzzle2 {
             Tower parent1 = individuals.get(parent1Index);
             Tower parent2 = individuals.get(parent2Index);
 
-            System.out.println("Parent 1:");
-            for (int i = 0; i < parent1.getPieces().size(); i++) {
-                Piece piece = parent1.getPieces().get(i);
-                System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
-            }
-            System.out.println();
-            System.out.println("Parent 2:");
-            for (int i = 0; i < parent2.getPieces().size(); i++) {
-                Piece piece = parent2.getPieces().get(i);
-                System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
-            }
+//            System.out.println("Parent 1:");
+//            for (int i = 0; i < parent1.getPieces().size(); i++) {
+//                Piece piece = parent1.getPieces().get(i);
+//                System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
+//            }
+//            System.out.println();
+//            System.out.println("Parent 2:");
+//            for (int i = 0; i < parent2.getPieces().size(); i++) {
+//                Piece piece = parent2.getPieces().get(i);
+//                System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
+//            }
 
             // Randomly selected cut points
             int cutPoint1 = random.nextInt(parent1.getPieces().size());
@@ -162,23 +168,26 @@ public class Puzzle2 {
             child1 = removeDuplicates(child1, pieces);
             child2 = removeDuplicates(child2, pieces);
 
-            System.out.println();
-            System.out.println("Child 1:");
-            for (int i = 0; i < child1.getPieces().size(); i++) {
-                Piece piece = child1.getPieces().get(i);
-                System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
-            }
-            System.out.println();
-            System.out.println("Child 2:");
-            for (int i = 0; i < child2.getPieces().size(); i++) {
-                Piece piece = child2.getPieces().get(i);
-                System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
-            }
-            System.out.println();
+//            System.out.println();
+//            System.out.println("Child 1:");
+//            for (int i = 0; i < child1.getPieces().size(); i++) {
+//                Piece piece = child1.getPieces().get(i);
+//                System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
+//            }
+//            System.out.println();
+//            System.out.println("Child 2:");
+//            for (int i = 0; i < child2.getPieces().size(); i++) {
+//                Piece piece = child2.getPieces().get(i);
+//                System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
+//            }
+//            System.out.println();
 
             result.add(child1);
             result.add(child2);
             numChildren += 2;
+        }
+        if (numChildren > size) {
+            result.remove(result.size() - 1);
         }
         return result;
     }
