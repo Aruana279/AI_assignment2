@@ -53,16 +53,17 @@ public class Individual {
     }
 
     public float calculateFitness() {
+        // Calculates contribution of bin 1
         float bin1Score = 1;
         for (float num : bin1) {
             bin1Score *= num;
         }
-
+        // Calculates contribution of bin 2
         float bin2Score = 0;
         for (float num : bin2) {
             bin2Score += num;
         }
-
+        // Calculates contribution of bin 3
         float max = -10;
         float min = 10;
         for (float num : bin3) {
@@ -74,7 +75,7 @@ public class Individual {
             }
         }
         float bin3Score = max - min;
-
+        // Sums the scores of the bins
         fitness = bin1Score + bin2Score + bin3Score;
         return fitness;
     }
@@ -94,10 +95,13 @@ public class Individual {
     public void mutation() {
         Random random = new Random();
         int index = random.nextInt(10);
+        // Grabs two random bins
         int randomBin1 = random.nextInt(4) + 1;
         int randomBin2 = random.nextInt(4) + 1;
+        // Grabs two random positions within the bins
         float bin1Value = getBin(randomBin1).get(index);
         float bin2Value = getBin(randomBin2).get(index);
+        // Swaps the corresponding values
         getBin(randomBin2).set(index, bin1Value);
         getBin(randomBin1).set(index, bin2Value);
     }

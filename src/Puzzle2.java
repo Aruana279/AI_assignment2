@@ -7,7 +7,7 @@ public class Puzzle2 {
     public void ga(List<Piece> pieces, int seconds) {
         Random random = new Random();
         long startTime = System.currentTimeMillis() / 1000;
-        int size = 10;
+        int size = 100;
         int NUMSAVED = (int) Math.floor(0.2 * (double) size);
         int NUMREMOVED = (int) Math.floor(0.3 * (double) size);
         TowerPopulation population = new TowerPopulation(size);

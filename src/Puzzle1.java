@@ -14,7 +14,7 @@ public class Puzzle1 {
         // Grabs the time when execution starts
         long startTime = System.currentTimeMillis() / 1000;
         // Population
-        int size = 10;
+        int size = 100;
         // Top 20% are saved through elitism, bottom 30% are culled
         int NUMSAVED = (int) Math.floor(0.2 * (double) size);
         int NUMREMOVED = (int) Math.floor(0.3 * (double) size);
