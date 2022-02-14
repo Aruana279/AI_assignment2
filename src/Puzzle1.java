@@ -9,11 +9,11 @@ public class Puzzle1 {
     // the highest scoring individual should be found at the last generation as long
     // as elitism is not 0
 
-    public int ga(List<Float> numbers, int seconds) {
+    public void ga(List<Float> numbers, int seconds) {
         Random random = new Random();
         // Grabs the time when execution starts
         long startTime = System.currentTimeMillis() / 1000;
-        // Population
+        // Population size
         int size = 100;
         // Top 20% are saved through elitism, bottom 30% are culled
         int NUMSAVED = (int) Math.floor(0.2 * (double) size);
@@ -27,22 +27,19 @@ public class Puzzle1 {
             List<Individual> topPerformers = elitism(population, NUMSAVED);
             // Cull the worst performers
             culling(population, NUMREMOVED);
-            // Do crossover using all unculled performers as the parent-pool
+            // Perform crossover using all unculled performers as the parent-pool
             population.setIndividuals(crossover(size - NUMSAVED, population.getIndividuals(), numbers));
-
             // 30% of the performers experience mutation
             for (Individual individual : population.getIndividuals()) {
                 if (random.nextInt(10) < 3) {
                     individual.mutation();
                 }
             }
-            // Elite individuals from previous generation are re-added to the pool of
-            // performers
+            // Elite individuals from previous generation are re-added to the pool of performers
             population.getIndividuals().addAll(topPerformers);
             System.out.println("Best Score: " + elitism(population, 1).get(0).calculateFitness());
             generationCount++;
         }
-        return generationCount;
     }
 
     public void culling(Population population, int numRemoved) {
@@ -63,7 +60,7 @@ public class Puzzle1 {
                 individuals.add(individual);
             }
         }
-        // Reset the individuals for the population
+        // Resets the population
         population.setIndividuals(individuals);
         System.out.println();
     }
@@ -85,8 +82,7 @@ public class Puzzle1 {
                     break;
                 }
             }
-            // Removes the performer so that the next best performer can be found on the
-            // next iteration
+            // Removes the performer so that the next best performer can be found on the next iteration
             fitnessScores.remove(new Float(max));
         }
         return topIndividuals;
@@ -191,6 +187,7 @@ public class Puzzle1 {
                     child2.getBin(parent2Bin).set(j, value1);
                 }
             }
+            // Replaces all duplicates in the children with the missing values
             child1 = removeDuplicates(child1, numbers);
             child2 = removeDuplicates(child2, numbers);
 
@@ -217,7 +214,6 @@ public class Puzzle1 {
         binValues.addAll(child.getBin4());
         List<Float> duplicates = new ArrayList<>();
         List<Float> missing = new ArrayList<>();
-
         // Iterates over every number that should appear, counts the number of times it appears
         for (int i = 0; i < 40; i++) {
             int count = 0;

@@ -6,40 +6,33 @@ import java.util.Random;
 public class Puzzle2 {
     public void ga(List<Piece> pieces, int seconds) {
         Random random = new Random();
+        // Grabs the time when execution starts
         long startTime = System.currentTimeMillis() / 1000;
+        // Population size
         int size = 100;
+        // Top 20% are saved through elitism, bottom 30% are culled
         int NUMSAVED = (int) Math.floor(0.2 * (double) size);
         int NUMREMOVED = (int) Math.floor(0.3 * (double) size);
         TowerPopulation population = new TowerPopulation(size);
         population.initializePopulation(pieces);
         int generationCount = 0;
         while (System.currentTimeMillis() / 1000 < startTime + seconds) {
-        //while (generationCount < 2) {
             System.out.println("\nGENERATION " + generationCount);
-            // Get fittest individuals from elitism and use those for the next generation
+            // Get fittest individuals from elitism and save them for the next generation
             List<Tower> topPerformers = elitism(population, NUMSAVED);
+            // Cull the worst performers
             culling(population, NUMREMOVED);
+            // Perform crossover using all unculled performers as the parent-pool
             population.setTowers(crossover(size - NUMSAVED, population.getTowers(), pieces));
-
-
+            // 30% of the performers experience mutation
             for (Tower individual : population.getTowers()) {
                 if (random.nextInt(10) < 3) {
                     individual.mutation();
                     System.out.println("MUTATION OCCURRED");
                 }
             }
-
+            // Elite individuals from previous generation are re-added to the pool of performers
             population.getTowers().addAll(topPerformers);
-
-            for (Tower individual : population.getTowers()) {
-                for (int i = 0; i < individual.getPieces().size(); i++) {
-                    Piece piece = individual.getPieces().get(i);
-                    System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
-                }
-                System.out.println("Score: " + individual.calculateScore());
-                System.out.println();
-            }
-
             System.out.println("Best Score: " + elitism(population, 1).get(0).calculateScore());
             generationCount++;
         }
@@ -47,17 +40,14 @@ public class Puzzle2 {
 
     public void culling(TowerPopulation population, int numRemoved) {
         List<Integer> scores = new ArrayList<>();
+        // Adds the fitness scores of every performer to a list
         for (Tower tower : population.getTowers()) {
             scores.add(tower.calculateScore());
         }
-//        for (float num : fitnessScores) {
-//            System.out.print(num + " ");
-//        }
-//        System.out.println();
+        // Removes the worst performer, iterates numRemoved times
         for (int i = 0; i < numRemoved; i++) {
             int min = Collections.min(scores);
             scores.remove(new Integer(min));
-//            System.out.println("Removed: " + min);
         }
         // Get the individuals whose scores weren't removed
         List<Tower> individuals = new ArrayList<>();
@@ -66,35 +56,38 @@ public class Puzzle2 {
                 individuals.add(tower);
             }
         }
-        // Reset the individuals for the population
+        // Resets the population
         population.setTowers(individuals);
-//        System.out.println();
-//        System.out.println(population.getTowers().size());
     }
 
     public List<Tower> elitism(TowerPopulation population, int numSaved) {
         List<Integer> scores = new ArrayList<>();
-
+        // Grabs the fitness scores of all performers
         for (Tower tower : population.getTowers()) {
             scores.add(tower.calculateScore());
         }
         List<Tower> topIndividuals = new ArrayList<>();
         for (int i = 0; i < numSaved; i++) {
+            // Grabs the best score
             int max = Collections.max(scores);
+            // Finds the corresponding performer and saves it
             for (Tower tower : population.getTowers()) {
                 if (tower.getScore() == max) {
                     topIndividuals.add(tower);
                     break;
                 }
             }
+            // Removes the performer so that the next best performer can be found on the next iteration
             scores.remove(new Integer(max));
         }
         return topIndividuals;
     }
 
     public List<Tower> crossover(int size, List<Tower> individuals, List<Piece> pieces) {
+        // Stores the children that are created
         List<Tower> result = new ArrayList<>();
         int numChildren = 0;
+        // Creates the list with gaps corresponding to performer quality
         List<Float> scores = new ArrayList<>();
         float fitnessSum = 0;
         for (int i = 0; i < individuals.size(); i++) {
@@ -102,9 +95,13 @@ public class Puzzle2 {
             fitnessSum += tempFit;
             scores.add(fitnessSum);
         }
+        // Creates children until no more are required
         while (numChildren < size) {
             Random random = new Random();
             int parent1Index = 0;
+            // Generates 2 random numbers >= 0 and < largest value in fitnessScores
+            // Selects the parents by finding the first number in fitnessScores greater than
+            // the random numbers
             float parent1Prob = random.nextFloat() * scores.get(scores.size() - 1);
             for (int i = 0; i < individuals.size(); i++) {
                 if (scores.get(i) >= parent1Prob) {
@@ -130,29 +127,18 @@ public class Puzzle2 {
                     }
                 }
             }
-            // Randomly selected parents
+            // Grabs the chosen parents
             Tower parent1 = individuals.get(parent1Index);
             Tower parent2 = individuals.get(parent2Index);
 
-//            System.out.println("Parent 1:");
-//            for (int i = 0; i < parent1.getPieces().size(); i++) {
-//                Piece piece = parent1.getPieces().get(i);
-//                System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
-//            }
-//            System.out.println();
-//            System.out.println("Parent 2:");
-//            for (int i = 0; i < parent2.getPieces().size(); i++) {
-//                Piece piece = parent2.getPieces().get(i);
-//                System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
-//            }
-
-            // Randomly selected cut points
+            // Randomly chooses cut points within the towers
             int cutPoint1 = random.nextInt(parent1.getPieces().size());
             int cutPoint2 = random.nextInt(parent2.getPieces().size());
 
             Tower child1 = new Tower();
             Tower child2 = new Tower();
 
+            // Assembles towers for the children using the parents and cutpoints
             for (int i = 0; i < cutPoint2; i++) {
                 child1.getPieces().add(parent2.getPieces().get(i));
             }
@@ -165,27 +151,18 @@ public class Puzzle2 {
             for (int i = cutPoint2; i < parent2.getPieces().size(); i++) {
                 child2.getPieces().add(parent2.getPieces().get(i));
             }
+            // Replaces all duplicates in the children with the missing values
             child1 = removeDuplicates(child1, pieces);
             child2 = removeDuplicates(child2, pieces);
 
-//            System.out.println();
-//            System.out.println("Child 1:");
-//            for (int i = 0; i < child1.getPieces().size(); i++) {
-//                Piece piece = child1.getPieces().get(i);
-//                System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
-//            }
-//            System.out.println();
-//            System.out.println("Child 2:");
-//            for (int i = 0; i < child2.getPieces().size(); i++) {
-//                Piece piece = child2.getPieces().get(i);
-//                System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
-//            }
-//            System.out.println();
-
+            // Saves the newly created children
             result.add(child1);
             result.add(child2);
             numChildren += 2;
         }
+        // Drops the last child if an extra is created
+        // All children are created in pairs, so to create an odd number of children,
+        // one must be dropped
         if (numChildren > size) {
             result.remove(result.size() - 1);
         }
@@ -193,9 +170,11 @@ public class Puzzle2 {
     }
 
     public Tower removeDuplicates(Tower child, List<Piece> pieces) {
+        // Grabs all the pieces of the specified tower
+        List<Piece> childPieces = child.getPieces();
         List<Piece> duplicates = new ArrayList<>();
         List<Piece> missing = new ArrayList<>();
-        List<Piece> childPieces = child.getPieces();
+        // Iterates over the tower, counts the number of times each piece appears
         for (Piece piece : pieces) {
             int count = 0;
             for (Piece childPiece : childPieces) {
@@ -203,18 +182,20 @@ public class Puzzle2 {
                     count++;
                 }
             }
+            // Pieces that do not appear are added to the 'missing' list
+            // Pieces that appear more than once are added to the 'duplicates' list
             if (count == 0) {
                 missing.add(piece);
             } else if (count > 1) {
                 duplicates.add(piece);
             }
         }
-//        System.out.println("DUPLICATES: " + duplicates.size());
-//        System.out.println("MISSING: " + missing.size());
         int count = 0;
         boolean dupFlag = false;
+        // Iterates over every duplicate
         List<Piece> toRemove = new ArrayList<>();
         for (int i = 0; i < duplicates.size(); i++) {
+            // Iterates over every piece in the tower
             for (int j = 0; j < childPieces.size(); j++) {
                 if (childPieces.get(j).equals(duplicates.get(i))) {
                     if (!dupFlag) {
@@ -233,6 +214,7 @@ public class Puzzle2 {
             }
             dupFlag = false;
         }
+        // Executes the removal if necessary
         childPieces.removeAll(toRemove);
 
         return child;

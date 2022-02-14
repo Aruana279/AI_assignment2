@@ -16,7 +16,7 @@ public class Main {
 		int seconds = Integer.parseInt(args[2]);
 
 		try {
-			//File file = new File("/Users/mollysunray/OneDrive - Worcester Polytechnic Institute (wpi.edu)/Courses/Junior/CS 4341/Assignments/Assignment2/src/" + fileName);
+			// MODIFY THIS STRING TO MATCH YOUR PERSONAL FILE STRUCTURE
 			File file = new File("/Users/magosheehy/Downloads/" + fileName);
 			Scanner scanner = new Scanner(file);
 			// Reads the input from the file, passes it to the GA
