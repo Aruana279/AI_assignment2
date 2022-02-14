@@ -16,8 +16,10 @@ public class Puzzle2 {
         TowerPopulation population = new TowerPopulation(size);
         population.initializePopulation(pieces);
         int generationCount = 0;
+        int bestGen = 0;
+        float bestScore = Float.NEGATIVE_INFINITY;
+        System.out.println("Starting Genetic Algoritm...");
         while (System.currentTimeMillis() / 1000 < startTime + seconds) {
-            System.out.println("\nGENERATION " + generationCount);
             // Get fittest individuals from elitism and save them for the next generation
             List<Tower> topPerformers = elitism(population, NUMSAVED);
             // Cull the worst performers
@@ -28,14 +30,30 @@ public class Puzzle2 {
             for (Tower individual : population.getTowers()) {
                 if (random.nextInt(10) < 3) {
                     individual.mutation();
-                    System.out.println("MUTATION OCCURRED");
                 }
             }
             // Elite individuals from previous generation are re-added to the pool of performers
             population.getTowers().addAll(topPerformers);
-            System.out.println("Best Score: " + elitism(population, 1).get(0).calculateScore());
+            //Update the generation of the best tower if necessary
+            for (Tower tower : population.getTowers()) {
+                if (tower.calculateScore() > bestScore) {
+                    bestScore = tower.calculateScore();
+                    bestGen = generationCount;
+                }
+            }
             generationCount++;
         }
+        // Execution summary
+        System.out.println("Ran for " + generationCount + " generations\n");
+        System.out.println("Best Performer:");
+        Tower bestPerformer = elitism(population, 1).get(0);
+        for (int i = 0; i < bestPerformer.getPieces().size(); i++) {
+            Piece piece = bestPerformer.getPieces().get(i);
+            System.out.println(piece.getType() + " " + piece.getWidth() + " " + piece.getStrength() + " " + piece.getCost());
+        }
+        System.out.println("\nScore: " + bestScore );
+        System.out.println("Solution found in generation " + bestGen);
+    
     }
 
     public void culling(TowerPopulation population, int numRemoved) {

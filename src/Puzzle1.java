@@ -1,5 +1,7 @@
 import java.util.*;
 
+import javafx.util.converter.PercentageStringConverter;
+
 public class Puzzle1 {
 
     // elitism
@@ -21,8 +23,10 @@ public class Puzzle1 {
         Population population = new Population(size);
         population.initializePopulation(numbers);
         int generationCount = 0;
+        int bestGen = 0;
+        float bestScore = Float.NEGATIVE_INFINITY;
+        System.out.println("Starting Genetic Algoritm...");
         while (System.currentTimeMillis() / 1000 < startTime + seconds) {
-            System.out.println("\nGENERATION " + generationCount);
             // Get fittest individuals from elitism and save them for the next generation
             List<Individual> topPerformers = elitism(population, NUMSAVED);
             // Cull the worst performers
@@ -35,11 +39,43 @@ public class Puzzle1 {
                     individual.mutation();
                 }
             }
-            // Elite individuals from previous generation are re-added to the pool of performers
+            // Elite individuals from previous generation are re-added to the pool of
+            // performers
             population.getIndividuals().addAll(topPerformers);
-            System.out.println("Best Score: " + elitism(population, 1).get(0).calculateFitness());
+            //Update the generation of the best performer if necessary
+            for (Individual performer : population.getIndividuals()) {
+                if (performer.calculateFitness() > bestScore) {
+                    bestScore = performer.calculateFitness();
+                    bestGen = generationCount;
+                }
+            }
             generationCount++;
         }
+        // Execution summary
+        System.out.println("Ran for " + generationCount + " generations\n");
+        System.out.println("Best Performer:");
+        Individual bestPerformer = elitism(population, 1).get(0);
+        System.out.print("Bin 1: ");
+        for (float num : bestPerformer.getBin(1)) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+        System.out.print("Bin 2: ");
+        for (float num : bestPerformer.getBin(2)) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+        System.out.print("Bin 3: ");
+        for (float num : bestPerformer.getBin(3)) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+        System.out.print("Bin 4: ");
+        for (float num : bestPerformer.getBin(4)) {
+            System.out.print(num + " ");
+        }
+        System.out.println("\n\nScore: " + bestScore);
+        System.out.println("Solution found in generation " + bestGen);
     }
 
     public void culling(Population population, int numRemoved) {
@@ -62,7 +98,6 @@ public class Puzzle1 {
         }
         // Resets the population
         population.setIndividuals(individuals);
-        System.out.println();
     }
 
     public List<Individual> elitism(Population population, int numSaved) {
@@ -82,7 +117,8 @@ public class Puzzle1 {
                     break;
                 }
             }
-            // Removes the performer so that the next best performer can be found on the next iteration
+            // Removes the performer so that the next best performer can be found on the
+            // next iteration
             fitnessScores.remove(new Float(max));
         }
         return topIndividuals;
@@ -214,7 +250,8 @@ public class Puzzle1 {
         binValues.addAll(child.getBin4());
         List<Float> duplicates = new ArrayList<>();
         List<Float> missing = new ArrayList<>();
-        // Iterates over every number that should appear, counts the number of times it appears
+        // Iterates over every number that should appear, counts the number of times it
+        // appears
         for (int i = 0; i < 40; i++) {
             int count = 0;
             for (int j = 0; j < 40; j++) {
@@ -238,8 +275,10 @@ public class Puzzle1 {
             // Iterates over every number in the bins
             for (int j = 0; j < binValues.size(); j++) {
                 if (binValues.get(j).equals(duplicates.get(i))) {
-                    // The first time the number is equal to the duplicate, nothing changes but a flag is set
-                    // The second time the number is equal to the duplicate, it is replaced with a missing value
+                    // The first time the number is equal to the duplicate, nothing changes but a
+                    // flag is set
+                    // The second time the number is equal to the duplicate, it is replaced with a
+                    // missing value
                     if (!dupFlag) {
                         dupFlag = true;
                     } else {
